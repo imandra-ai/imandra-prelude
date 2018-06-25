@@ -12,6 +12,5 @@ depends: [
   "jbuilder" {build}
   "zarith"
   "containers"
-  "z3"
   ]
 
