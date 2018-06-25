@@ -1,0 +1,8 @@
+
+(library
+  ((name imandra_prelude)
+   (public_name imandra-prelude)
+   (modules (Imandra_prelude))
+   (libraries (zarith z3 containers))
+   (modes (byte native))
+   ))
