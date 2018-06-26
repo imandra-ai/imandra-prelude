@@ -7,7 +7,7 @@ homepage: "http://www.imandra.ai/"
 bug-reports: "Grant Passmore <grant@aestheticintegration.com>"
 license: "Apache 2"
 dev-repo: "git+https://github.com/AestheticIntegration/imandra-prelude"
-build: [make "build"]
+build: [["jbuilder" "build" "-p" name "-j" jobs]]
 depends: [
   "jbuilder" {build}
   "zarith"
