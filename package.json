@@ -4,7 +4,11 @@
   "description": "Extracted version of imandra's prelude",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "bsb -clean",
+    "build": "bsb -make-world",
+    "watch": "bsb -make-world -w",
+    "test": "node src-test/tests.bs.js"
   },
   "repository": {
     "type": "git",

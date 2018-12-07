@@ -15,8 +15,9 @@ external (-) : t -> t -> t = "subtract" [@@bs.send]
 external (~-) : t -> t = "negate" [@@bs.send]
 external (~+) : t -> t = "%identity"
 external ( * ) : t -> t -> t = "multiply" [@@bs.send]
+external (=) : t -> t -> bool = "eq" [@@bs.send]
 
-external erem : t -> t -> t = "mod" [@@bs.send]
+external (mod) : t -> t -> t = "mod" [@@bs.send]
 
 type q_r = { quotient: t; remainder: t } [@@bs.deriving abstract]
 external div_rem_ : t -> t -> q_r = "divmod" [@@bs.send]

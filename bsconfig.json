@@ -4,6 +4,10 @@
     {
       "dir": "src-bs",
       "subdirs": true
+    },
+    {
+      "dir": "src-test",
+      "subdirs": true
     }
   ],
   "package-specs": {
