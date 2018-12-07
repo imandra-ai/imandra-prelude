@@ -1,0 +1,22 @@
+{
+  "name": "imandra-prelude",
+  "version": "1.0.0",
+  "description": "Extracted version of imandra's prelude",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aestheticintegration/imandra-prelude.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aestheticintegration/imandra-prelude/issues"
+  },
+  "homepage": "https://github.com/aestheticintegration/imandra-prelude#readme",
+  "devDependencies": {
+    "bs-platform": "^4.0.8"
+  }
+}
