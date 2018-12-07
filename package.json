@@ -18,5 +18,9 @@
   "homepage": "https://github.com/aestheticintegration/imandra-prelude#readme",
   "devDependencies": {
     "bs-platform": "^4.0.8"
+  },
+  "dependencies": {
+    "big-integer": "^1.6.40",
+    "big-rational": "^0.10.7"
   }
 }
