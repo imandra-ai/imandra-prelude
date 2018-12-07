@@ -3,10 +3,10 @@
 
 
 
-
+#6 "prelude.iml"
 type 'a printer = Format.formatter -> 'a -> unit
 
-
+#7 "prelude.iml"
 module Caml =
 struct
   include Pervasives
@@ -64,136 +64,136 @@ struct
   end 
 end
 
-
+#70 "prelude.iml"
 module Caml_unix = Unix
 
-
+#71 "prelude.iml"
 module Caml_sys = Sys
 
-
+#75 "prelude.iml"
 module Unix = struct  end
 
-
+#76 "prelude.iml"
 module Sys = struct  end
 
 
-
+#82 "prelude.iml"
 [@@@ocaml.text
   " {2 Bare minimum needed for ordinals and validation} "]
-
+#94 "prelude.iml"
 type nonrec int = Z.t[@@ocaml.doc
   " Builtin integer type, using arbitrary precision integers.\n\n    This type is an alias to {!Z.t}\n    (using {{: https://github.com/ocaml/Zarith} Zarith}).\n\n    {b NOTE}: here Imandra diverges from normal OCaml, where integers width\n    is bounded by native machine integers.\n    \"Normal\" OCaml integers have type {!Caml.Int.t} and can be entered\n    using the 'i' suffix: [0i]\n"]
 
-
+#96 "prelude.iml"
 type nonrec float = float
 
-
+#98 "prelude.iml"
 type nonrec real = Q.t
 
-
+#102 "prelude.iml"
 type nonrec string = string[@@ocaml.doc
   " Type of (byte)strings. Need to have it here so as to be\n    able to type [Z.of_string \"42\"] "]
 
-
+#105 "prelude.iml"
 let (=) = Pervasives.(=)[@@ocaml.doc
   " Equality. Must be applied to non-function types. "]
 
-
+#107 "prelude.iml"
 let (<) : int -> int -> bool = (<)
 
-
+#108 "prelude.iml"
 let (<=) : int -> int -> bool = (<=)
 
-
+#109 "prelude.iml"
 let (>) : int -> int -> bool = (>)
 
-
+#110 "prelude.iml"
 let (>=) : int -> int -> bool = (>=)
 
-
+#111 "prelude.iml"
 let min : int -> int -> int = min
 
-
+#112 "prelude.iml"
 let max : int -> int -> int = max
 
-
+#114 "prelude.iml"
 let (<.) : real -> real -> bool = Q.lt
 
-
+#115 "prelude.iml"
 let (<=.) : real -> real -> bool = Q.leq
 
-
+#116 "prelude.iml"
 let (>.) : real -> real -> bool = Q.gt
 
-
+#117 "prelude.iml"
 let (>=.) : real -> real -> bool = Q.geq
 
-
+#118 "prelude.iml"
 let min_r : real -> real -> real = Q.min
 
-
+#119 "prelude.iml"
 let max_r : real -> real -> real = Q.max
 
-
+#121 "prelude.iml"
 let (<>) = Pervasives.(<>)
 
-
+#122 "prelude.iml"
 let not = let open Pervasives in not
 
-
+#123 "prelude.iml"
 let implies x y = if x then y else true
 
-
+#124 "prelude.iml"
 let explies x y = implies y x
 
-
+#125 "prelude.iml"
 let iff x y = (implies x y) && (implies y x)
 
-
+#127 "prelude.iml"
 let (+) = Z.(+)
 
-
+#128 "prelude.iml"
 let (~-) = Z.(~-)
 
-
+#129 "prelude.iml"
 let abs (x : int) =
   if x >= (Z.of_string "0") then x else - x
 
-
+#130 "prelude.iml"
 let mk_nat (x : int) =
   (if x >= (Z.of_string "0") then x else Z.of_string "0" : 
                                            int)
 
-
+#132 "prelude.iml"
 let (-) = Z.(-)
 
-
+#133 "prelude.iml"
 let (~+) (x : Z.t) = x
 
-
+#134 "prelude.iml"
 let ( * ) = Z.( * )
 
-
+#138 "prelude.iml"
 let (/) = Z.ediv[@@ocaml.doc
   " Euclidian division on integers,\n    see http://smtlib.cs.uiowa.edu/theories-Ints.shtml "]
 
-
+#141 "prelude.iml"
 let (mod) = Z.erem[@@ocaml.doc
   " Euclidian remainder on integers "]
 
-
+#145 "prelude.iml"
 let const x _ = x[@@ocaml.doc
   " [const x y] returns [x]. In other words, [const x] is\n    the constant function that always returns [x]. "]
 
-
+#148 "prelude.iml"
 let compare (x : int) (y : int) =
   if x = y
   then Z.of_string "0"
   else if x < y then Z.of_string "-1" else Z.of_string "1"
 [@@ocaml.doc " Total order "]
-
+#150 "prelude.iml"
 [@@@ocaml.text " {2 Ordinals} "]
-
+#155 "prelude.iml"
 module Ordinal :
 sig
   type t = private
@@ -335,19 +335,19 @@ end [@@ocaml.doc
   " We need to define ordinals before any recursive function is defined,\n    because ordinals are used for termination proofs.\n"]
 
 
-
+#339 "prelude.iml"
 [@@@ocaml.text " {2 Other builtin types} "]
-
+#341 "prelude.iml"
 type nonrec unit = unit =
   | () 
 
-
+#345 "prelude.iml"
 type ('a, 'b) result = ('a, 'b) Belt.Result.t =
   | Ok of 'a 
   | Error of 'b [@@ocaml.doc
   " Result type, representing either a successul result [Ok x]\n    or an error [Error x]. "]
 
-
+#347 "prelude.iml"
 module Result =
 struct
   type ('a, 'b) t = ('a, 'b) result
@@ -374,59 +374,59 @@ struct
     function | Ok _ -> false | Error _ -> true
 end
 
-
+#398 "prelude.iml"
 type ('a, 'b) either =
   | Left of 'a 
   | Right of 'b [@@ocaml.doc
   " A familiar type for Haskellers "]
 
-
+#407 "prelude.iml"
 let (|>) x f = f x[@@ocaml.doc
   " Pipeline operator.\n\n    [x |> f] is the same as [f x], but it composes nicely:\n    [ x |> f |> g |> h] can be more readable than [h(g(f x))].\n"]
 
-
+#414 "prelude.iml"
 let (@@) f x = f x[@@ocaml.doc
   " Right-associative application operator.\n\n    [f @@ x] is the same as [f x], but it binds to the right:\n    [f @@ g @@ h @@ x] is the same as [f (g (h x))] but with fewer parenthesis.\n"]
 
-
+#417 "prelude.iml"
 let id x = x[@@ocaml.doc
   " Identity function. [id x = x] always holds. "]
 
-
+#422 "prelude.iml"
 let (%>) f g x = g (f x)[@@ocaml.doc
   " Mathematical composition operator.\n\n    [f %> g] is [fun x -> g (f x)] "]
 
-
+#426 "prelude.iml"
 let (==) = Caml.(==)[@@program ]
 
-
+#427 "prelude.iml"
 let (!=) = Caml.(!=)[@@program ]
 
-
+#429 "prelude.iml"
 let (+.) : real -> real -> real = Q.(+)
 
-
+#430 "prelude.iml"
 let (-.) : real -> real -> real = Q.(-)
 
-
+#431 "prelude.iml"
 let (~-.) = Q.neg
 
-
+#432 "prelude.iml"
 let ( *. ) : real -> real -> real = Q.( * )
 
-
+#433 "prelude.iml"
 let (/.) : real -> real -> real = Q.(/)
 
-
+#435 "prelude.iml"
 let (==>) a b = implies a b
 
-
+#436 "prelude.iml"
 let (<==) a b = explies a b
 
-
+#437 "prelude.iml"
 let (<==>) a b = iff a b
 
-
+#447 "prelude.iml"
 module List =
 struct
   type 'a t = 'a list
@@ -591,14 +591,14 @@ struct
 end[@@ocaml.doc
   " {2 List module}\n\n    This module contains many safe functions for manipulating lists.\n"]
 
-
+#660 "prelude.iml"
 let (@) = List.append[@@ocaml.doc
   " Infix alias to {!List.append} "]
 
-
+#663 "prelude.iml"
 let (--) = List.(--)[@@ocaml.doc " Alias to {!List.--} "]
 
-
+#665 "prelude.iml"
 module Int =
 struct
   type t = int
@@ -629,7 +629,7 @@ struct
   let of_caml_int = Z.of_int[@@program ]
 end
 
-
+#703 "prelude.iml"
 module Option =
 struct
   type 'a t = 'a option
@@ -670,7 +670,7 @@ struct
 end[@@ocaml.doc
   " {2 Option module}\n\n    The option type [type 'a option = None | Some of 'a] is useful for\n    representing partial functions and optional values.\n    "]
 
-
+#787 "prelude.iml"
 module Real =
 struct
   type t = real
@@ -702,7 +702,7 @@ struct
     string_of_float @@ (Q.to_float x)[@@program ]
 end
 
-
+#829 "prelude.iml"
 module Map :
 sig
   type (+'a, 'b) t
@@ -853,7 +853,7 @@ end
 
 
 
-
+#987 "prelude.iml"
 module Multiset :
 sig
   type +'a t = ('a, int) Map.t
@@ -883,9 +883,9 @@ struct
     | x::tail -> (add x) @@ (of_list tail)
 end [@@ocaml.doc
   " {2 Multiset}\n\n    A multiset is a collection of elements that don't have any particular\n    order, but can occur several times (unlike a regular set). "]
-
+#1013 "prelude.iml"
 [@@@ocaml.text " {2 Sets} "]
-
+#1015 "prelude.iml"
 module Set :
 sig
   type +'a t = ('a, bool) Map.t
@@ -995,7 +995,7 @@ struct
 end 
 
 
-
+#1130 "prelude.iml"
 module String :
 sig
   type t = string
@@ -1064,25 +1064,25 @@ struct
 end [@@ocaml.doc
   " {2 Byte strings}\n\n    These strings correspond to OCaml native strings, and do not have\n    a particular unicode encoding.\n\n    Rather, they should be seen as sequences of bytes, and it is also\n    this way that Imandra considers them.\n"]
 
-
+#1224 "prelude.iml"
 let (^) = String.append[@@ocaml.doc
   " Alias to {!String.append} "]
 
-
+#1227 "prelude.iml"
 let succ x = x + (Z.of_string "1")[@@ocaml.doc
   " Next integer "]
 
-
+#1230 "prelude.iml"
 let pred x = x - (Z.of_string "1")[@@ocaml.doc
   " Previous integer "]
 
-
+#1232 "prelude.iml"
 let fst (x, _) = x
 
-
+#1233 "prelude.iml"
 let snd (_, y) = y
 
-
+#1235 "prelude.iml"
 module Float =
 struct
   type t = float
@@ -1147,7 +1147,7 @@ struct
   let sqrt : t -> t = Caml.sqrt
 end
 
-
+#1294 "prelude.iml"
 module Pervasives = struct  end
 
 
