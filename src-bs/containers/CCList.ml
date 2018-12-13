@@ -1,3 +1,4 @@
+
 (* This file is free software, part of containers. See file "license" for more details. *)
 
 (** {1 Complements to list} *)
@@ -597,8 +598,7 @@ let sort_uniq ~cmp l = List.sort_uniq cmp l
 (*$T
   sort_uniq ~cmp:CCInt.compare [1;2;5;3;6;1;4;2;3] = [1;2;3;4;5;6]
   sort_uniq ~cmp:CCInt.compare [] = []
-  sort_uni
-q ~cmp:CCInt.compare [10;10;10;10;1;10] = [1;10]
+  sort_uniq ~cmp:CCInt.compare [10;10;10;10;1;10] = [1;10]
 *)
 
 let is_sorted ~cmp l =
@@ -1003,8 +1003,8 @@ let keep_some l = filter_map (fun x->x) l
 let keep_ok l =
   filter_map
     (function
-      | Belt.Result.Ok x -> Some x
-      | Belt.Result.Error _ -> None)
+      | Result.Ok x -> Some x
+      | Result.Error _ -> None)
     l
 
 let all_some l =
@@ -1020,14 +1020,14 @@ let all_some l =
 let all_ok l =
   let err = ref None in
   try
-    Belt.Result.Ok
+    Result.Ok
       (map
-         (function Belt.Result.Ok x -> x | Belt.Result.Error e -> err := Some e; raise Exit)
+         (function Result.Ok x -> x | Result.Error e -> err := Some e; raise Exit)
          l)
   with Exit ->
     begin match !err with
       | None -> assert false
-      | Some e -> Belt.Result.Error e
+      | Some e -> Result.Error e
     end
 
 let group_by (type k) ?(hash=Hashtbl.hash) ?(eq=Pervasives.(=)) l =
@@ -1709,3 +1709,4 @@ let pp ?(start="") ?(stop="") ?(sep=", ") pp_item fmt l =
         (CCFormat.hbox(CCList.pp ~start:"[" ~stop:"]" CCFormat.int)) \
         [1;2;3])
 *)
+

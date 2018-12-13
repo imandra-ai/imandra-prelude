@@ -1,3 +1,4 @@
+
 (* This file is free software, part of containers. See file "license" for more details. *)
 
 (** {1 Options} *)
@@ -147,16 +148,16 @@ let of_list = function
   | [] -> None
 
 let to_result err = function
-  | None -> Belt.Result.Error err
-  | Some x -> Belt.Result.Ok x
+  | None -> Result.Error err
+  | Some x -> Result.Ok x
 
 let to_result_lazy err_fn = function
-  | None -> Belt.Result.Error (err_fn ())
-  | Some x -> Belt.Result.Ok x
+  | None -> Result.Error (err_fn ())
+  | Some x -> Result.Ok x
 
 let of_result = function
-  | Belt.Result.Error _ -> None
-  | Belt.Result.Ok x -> Some x
+  | Result.Error _ -> None
+  | Result.Ok x -> Some x
 
 module Infix = struct
   let (>|=) = (>|=)

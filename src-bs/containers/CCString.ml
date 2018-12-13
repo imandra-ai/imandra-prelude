@@ -1,3 +1,4 @@
+
 (* This file is free software, part of containers. See file "license" for more details. *)
 
 (** {1 Basic String Utils} *)
@@ -879,8 +880,7 @@ let concat_gen_buf ~sep g : Buffer.t =
     | Some s ->
       if not first then Buffer.add_string b sep;
       Buffer.add_string b s;
-      aux ~first:false
- ()
+      aux ~first:false ()
   in aux ~first:true ()
 
 let concat_gen ~sep g =

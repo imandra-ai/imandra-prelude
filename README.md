@@ -38,3 +38,9 @@ To run tests in JS (having already built):
     eval $(opam env)
     make test
 
+## Licence information
+
+This repository contains parts of the `ocaml-containers` library https://github.com/c-cube/ocaml-containers/, so those source files (in `src-bs/containers`) preserve the license of that library. The files have been modified slightly from the originals to be compatible with the Bucklescript compiler.
+
+See `LICENSE.md` and `src-bs/containers/LICENSE.md` for further details.
+
