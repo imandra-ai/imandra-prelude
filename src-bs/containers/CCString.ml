@@ -105,9 +105,9 @@ let _is_sub ~sub i s j ~len =
   in
   j+len <= String.length s && check 0
 
-let is_sub ~sub i s j ~len =
-  if i+len > String.length sub then invalid_arg "CCString.is_sub";
-  _is_sub ~sub i s j ~len
+let is_sub ~sub i s j ~sub_len =
+  if i+sub_len > String.length sub then invalid_arg "CCString.is_sub";
+  _is_sub ~sub i s j ~len:sub_len
 
 type _ direction =
   | Direct : [`Direct] direction

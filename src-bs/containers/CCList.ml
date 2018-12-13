@@ -1003,8 +1003,8 @@ let keep_some l = filter_map (fun x->x) l
 let keep_ok l =
   filter_map
     (function
-      | Result.Ok x -> Some x
-      | Result.Error _ -> None)
+      | Belt.Result.Ok x -> Some x
+      | Belt.Result.Error _ -> None)
     l
 
 let all_some l =
@@ -1020,14 +1020,14 @@ let all_some l =
 let all_ok l =
   let err = ref None in
   try
-    Result.Ok
+    Belt.Result.Ok
       (map
-         (function Result.Ok x -> x | Result.Error e -> err := Some e; raise Exit)
+         (function Belt.Result.Ok x -> x | Belt.Result.Error e -> err := Some e; raise Exit)
          l)
   with Exit ->
     begin match !err with
       | None -> assert false
-      | Some e -> Result.Error e
+      | Some e -> Belt.Result.Error e
     end
 
 let group_by (type k) ?(hash=Hashtbl.hash) ?(eq=Pervasives.(=)) l =
