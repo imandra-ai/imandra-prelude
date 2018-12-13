@@ -3,6 +3,6 @@
   ((name imandra_prelude)
    (public_name imandra-prelude)
    (modules (Imandra_prelude))
-   (libraries (zarith containers))
+   (libraries (zarith containers unix))
    (modes (byte native))
    ))
