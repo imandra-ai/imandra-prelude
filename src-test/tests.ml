@@ -1,5 +1,5 @@
 let expect_z_eq a b =
-  if Z.(a = b) then
+  if (Z.(=) a b) then
     print_endline "pass"
   else
     print_endline (Printf.sprintf "fail: %s <> %s" (Z.to_string a) (Z.to_string b))
