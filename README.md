@@ -8,7 +8,7 @@ This package contains the extracted `.ml` version of `Imandra_prelude.iml` so it
 
 ## Usage from an native OCaml project:
 
-    opam install imandra-prelude https://github.com/aestheticintegration/imandra-prelude.git
+    opam pin add imandra-prelude https://github.com/aestheticintegration/imandra-prelude.git
 
 ## Usage from a bucklescript project:
 
