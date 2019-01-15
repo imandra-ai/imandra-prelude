@@ -1,6 +1,6 @@
 opam-version: "1.2"
 name: "imandra-prelude"
-version: "1.0.1"
+version: "1.0.3"
 maintainer: "Grant Passmore <grant@aestheticintegration.com>"
 authors: "Grant Passmore <grant@aestheticintegration.com>"
 homepage: "http://www.imandra.ai/"
