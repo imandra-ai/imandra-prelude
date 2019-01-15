@@ -23,14 +23,14 @@ Then add `{ ... "bs-dependencies": ['imandra-prelude'] }` to your `.bsconfig.jso
 
     npm install
     npm run build
-    
+
 To develop - watches files and incrementally compiles
 
     npm run watch
-    
+
 To run tests in JS (having already built):
 
-    node src-test/tests.bs.js
+    npm test
 
 ### OCaml setup
 
