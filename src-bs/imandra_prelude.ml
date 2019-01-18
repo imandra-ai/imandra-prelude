@@ -2,6 +2,7 @@
 (* modified to:
    - change Pervasives.result -> Belt.Result.t
    - remove Unix references
+   - change numeric comparisons to operate on Z
 *)
 
 
