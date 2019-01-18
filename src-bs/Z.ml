@@ -7,6 +7,8 @@ external to_float : t -> float = "valueOf" [@@bs.send]
 external to_string : t -> string = "toString" [@@bs.send]
 external lt : t -> t -> bool = "lt" [@@bs.send]
 external gt : t -> t -> bool = "gt" [@@bs.send]
+external leq : t -> t -> bool = "leq" [@@bs.send]
+external geq : t -> t -> bool = "geq" [@@bs.send]
 external zero : t = "zero" [@@bs.module "big-integer"]
 external minus_one : t = "minusOne" [@@bs.module "big-integer"]
 external one : t = "one" [@@bs.module "big-integer"]
@@ -66,3 +68,6 @@ let erem a b =
    if sign r >= 0 then r else add r (abs b)
 
 let pp_print f x = Format.pp_print_string f (to_string x)
+
+external min : t -> t -> t = "min" [@@bs.module "big-integer"]
+external max : t -> t -> t = "max" [@@bs.module "big-integer"]

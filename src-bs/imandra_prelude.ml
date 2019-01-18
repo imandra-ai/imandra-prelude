@@ -105,22 +105,22 @@ let (=) = Pervasives.(=)[@@ocaml.doc
   " Equality. Must be applied to non-function types. "]
 
 #109 "prelude.iml"
-let (<) : int -> int -> bool = (<)
+let (<) : int -> int -> bool = Z.lt
 
 #110 "prelude.iml"
-let (<=) : int -> int -> bool = (<=)
+let (<=) : int -> int -> bool = Z.leq
 
 #111 "prelude.iml"
-let (>) : int -> int -> bool = (>)
+let (>) : int -> int -> bool = Z.gt
 
 #112 "prelude.iml"
-let (>=) : int -> int -> bool = (>=)
+let (>=) : int -> int -> bool = Z.geq
 
 #113 "prelude.iml"
-let min : int -> int -> int = min
+let min : int -> int -> int = Z.min
 
 #114 "prelude.iml"
-let max : int -> int -> int = max
+let max : int -> int -> int = Z.max
 
 #116 "prelude.iml"
 let (<.) : real -> real -> bool = Q.lt
