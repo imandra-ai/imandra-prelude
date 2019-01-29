@@ -1,5 +1,7 @@
 # imandra-prelude
 
+[![Build Status](https://api.travis-ci.org/AestheticIntegration/imandra-prelude.svg?branch=master)](https://travis-ci.org/AestheticIntegration/imandra-prelude)
+
 Imandra provides a prelude, Imandra_prelude, which is available when verifying and executing `.iml` programs via Imandra.
 
 As `.iml` and `.ml` syntax has some small differences, we provide `imandra-extract` to extract `.ml` syntax source from `.iml` source.
