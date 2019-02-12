@@ -71,3 +71,7 @@ let pp_print f x = Format.pp_print_string f (to_string x)
 
 external min : t -> t -> t = "min" [@@bs.module "big-integer"]
 external max : t -> t -> t = "max" [@@bs.module "big-integer"]
+
+
+let compare a b =
+  if gt a b then 1 else if lt a b then -1 else 0
