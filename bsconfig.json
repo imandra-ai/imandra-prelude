@@ -7,7 +7,8 @@
     },
     {
       "dir": "src-test",
-      "subdirs": true
+      "subdirs": true,
+      "type": "dev"
     }
   ],
   "package-specs": {
