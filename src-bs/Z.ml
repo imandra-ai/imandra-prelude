@@ -2,6 +2,7 @@ type t
 
 external of_string : string -> t = "big-integer" [@@bs.module]
 external of_int : int -> t = "big-integer" [@@bs.module]
+external of_nativeint : nativeint -> t = "big-integer" [@@bs.module]
 external to_int : t -> int = "valueOf" [@@bs.send]
 external to_float : t -> float = "valueOf" [@@bs.send]
 external to_string : t -> string = "toString" [@@bs.send]
