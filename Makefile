@@ -11,4 +11,4 @@ reindent:
 	ocp-indent -i $(FILES)
 
 test:
-	jbuilder exec src-test/tests.exe
+	@dune runtest --force --no-buffer

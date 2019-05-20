@@ -1,0 +1,10 @@
+(executable
+ (name tests)
+ (modules tests)
+ (flags :standard -w -33)
+ (libraries zarith containers imandra_prelude)
+ (modes byte native))
+
+(alias
+  (name runtest)
+  (action (run ./tests.exe)))

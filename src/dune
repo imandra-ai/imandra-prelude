@@ -3,6 +3,6 @@
   (name imandra_prelude)
   (public_name imandra-prelude)
   (modules Imandra_prelude)
+  (flags :standard -w -6-27-32-37)
   (libraries zarith containers unix)
-  (modes byte native)
-)
+  (modes byte native))

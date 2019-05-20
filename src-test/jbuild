@@ -1,6 +1,0 @@
-(executable
- ((name tests)
-  (modules (tests))
-  (libraries (zarith containers imandra_prelude))
-  (modes (byte native))
-))
