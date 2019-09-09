@@ -1,9 +1,9 @@
 
 build:
-	jbuilder build @install -j 3
+	@dune build @install -j 3
 
 clean:
-	jbuilder clean
+	@dune clean
 
 FILES=$(shell find src \( -name '*.ml' -or -name '*.mli' \))
 
