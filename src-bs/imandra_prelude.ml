@@ -35,7 +35,7 @@ struct
   module Set = Set
   module Map = Map
   module Printf = Printf
-  module Format = Format
+  module Format = CCFormat
   let float_of_string = float_of_string
   let count_function_actual_implem (_ : 'a) =
     (failwith
@@ -1051,6 +1051,130 @@ struct
   let rem : t -> t -> t = Caml.mod_float
   let sqrt : t -> t = Caml.sqrt
 end
-
 #1412 "prelude.iml"
+module Reflect =
+struct
+  module Uid =
+  struct
+    type t = {
+      name: string ;
+      payload: string }
+    let pp out (x : t) = (CCFormat.string out x.name : unit)[@@program ]
+  end
+  module Type =
+  struct
+    type t =
+      | Arrow of string * t * t
+      | Tuple of t list
+      | Constr of Uid.t * t list
+    let rec pp out (x : t) =
+      (match x with
+       | Tuple l ->
+         CCFormat.fprintf out "(@[%a@])"
+           (let open CCFormat in list ~sep:(return ",@ ") pp) l
+       | Arrow ("", a, b) ->
+         CCFormat.fprintf out "(@[%a@ -> %a@])" pp a pp b
+       | Arrow (s, a, b) ->
+         CCFormat.fprintf out "(@[%s:%a@ -> %a@])" s pp a pp b
+       | Constr (id, []) -> Uid.pp out id
+       | Constr (id, a::[]) ->
+         CCFormat.fprintf out "@[%a@ %a@]" pp a Uid.pp id
+       | Constr (id, l) ->
+         CCFormat.fprintf out "(@[%a@]) %a"
+           (let open CCFormat in list ~sep:(return ",@ ") pp) l Uid.pp
+           id : unit)[@@program ]
+  end
+  module Var =
+  struct
+    type t = {
+      id: Uid.t ;
+      ty: Type.t ;
+      is_skolem: bool }
+    let pp_name out (x : t) = Uid.pp out x.id[@@program ]
+    let pp out (x : t) =
+      CCFormat.fprintf out "(@[%a@ : %a@])" Uid.pp x.id Type.pp x.ty
+    [@@program ]
+  end
+  module Term =
+  struct
+    type const =
+      | Const_string of string
+      | Const_z of Int.t
+      | Const_q of Real.t
+    let pp_const out =
+      function
+      | Const_string x -> CCFormat.fprintf out "%S" x
+      | Const_z x -> Int.pp out x
+      | Const_q x -> Real.pp out x[@@program ]
+    type 'a binding = (Var.t * 'a)
+    type t =
+      | True
+      | False
+      | Const of const
+      | If of t * t * t
+      | Apply of t * t list
+      | Ident of Uid.t
+      | Tuple of t list
+      | Let of {
+          rec_: bool ;
+          bindings: t binding list ;
+          body: t }
+      | Tuple_field of int * t
+      | Construct of Uid.t * t list
+      | Destruct of Uid.t * int * t
+      | Is_a of Uid.t * t
+      | Field of Uid.t * t
+      | Record of (Uid.t * t) list * t option
+      | Fun of Var.t * t
+    let dummy = True[@@program ]
+    let rec pp out =
+      function
+      | True -> CCFormat.string out "true"
+      | False -> CCFormat.string out "false"
+      | Const c -> pp_const out c
+      | If (a, b, c) ->
+        CCFormat.fprintf out "(@[if %a@ then %a@ else %a@])" pp a pp b
+          pp c
+      | Ident v -> Uid.pp out v
+      | Apply (f, []) -> pp out f
+      | Apply (f, l) ->
+        CCFormat.fprintf out "(@[%a@ %a@])" pp f
+          (let open CCFormat in list ~sep:(return "@ ") pp) l
+      | Tuple l ->
+        CCFormat.fprintf out "(@[%a@])"
+          (let open CCFormat in list ~sep:(return ",@ ") pp) l
+      | Tuple_field (i, u) ->
+        CCFormat.fprintf out "(@[tuple-get-%a@ %a@])" Int.pp i pp u
+      | Let { rec_; bindings; body } ->
+        let pp_binding out (v, u) =
+          Format.fprintf out "@[<2>%a@ = %a@]" Var.pp_name v pp u in
+        CCFormat.fprintf out "(@[let%s@ %a@ in %a@])"
+          (if rec_ then " rec" else "")
+          (let open CCFormat in list ~sep:(return "@ and ") pp_binding)
+          bindings pp body
+      | Construct (id, []) -> Uid.pp out id
+      | Construct (id, l) ->
+        Format.fprintf out "(@[%a@ (@[%a@])@])" Uid.pp id
+          (let open CCFormat in list ~sep:(return ",@ ") pp) l
+      | Record (l, rest) ->
+        let pp_field out (f, u) =
+          Format.fprintf out "@[%a@ = %a@]" Uid.pp f pp u in
+        let pp_rest out =
+          function
+          | None -> ()
+          | Some r -> Format.fprintf out "%a with@ " pp r in
+        Format.fprintf out "{@[%a%a@]}" pp_rest rest
+          (let open CCFormat in list ~sep:(return ";@ ") pp_field) l
+      | Destruct (c, i, u) ->
+        CCFormat.fprintf out "(@[destruct-%a-%a@ %a@])" Uid.pp c Int.pp
+          i pp u
+      | Is_a (c, u) ->
+        CCFormat.fprintf out "(@[is-%a@ %a@])" Uid.pp c pp u
+      | Field (f, u) -> CCFormat.fprintf out "%a.%a" pp u Uid.pp f
+      | Fun (v, body) ->
+        CCFormat.fprintf out "(@[<1>fun %a ->@ %a@])" Var.pp_name v pp
+          body[@@program ]
+  end
+end[@@ocaml.doc " {2 Reflection} "]
+#1557 "prelude.iml"
 module Pervasives = struct  end
