@@ -557,6 +557,8 @@ struct
     (if i >= j then (f i; for_down_to (i - (Z.of_nativeint 1n)) j f) : 
                       unit)[@@program ]
 end
+#777 "prelude.iml"
+module Bool = struct type t = bool end
 #780 "prelude.iml"
 module Array =
 struct
