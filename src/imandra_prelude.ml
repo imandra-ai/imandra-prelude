@@ -432,10 +432,12 @@ module List =
       match l with | [] -> base | x::tail -> f x (fold_right f ~base tail)
       [@@ocaml.doc
         " Fold-right, without accumulator. This is generally more friendly for\n      induction than [fold_left]. "]
-    let rec mapi ?(base= Z.of_nativeint 0n)  f l =
+    let rec mapi_with ~base  f l =
       match l with
       | [] -> []
-      | x::l2 -> (f base x) :: (mapi ~base:(base + (Z.of_nativeint 1n)) f l2)
+      | x::l2 -> (f base x) ::
+          (mapi_with ~base:(base + (Z.of_nativeint 1n)) f l2)
+    let mapi f l = mapi_with ~base:(Z.of_nativeint 0n) f l
     let rec filter f =
       function
       | [] -> []
@@ -502,11 +504,11 @@ module List =
                                                                  " Check whether a list is sorted, using the [leq] small-or-equal-than\n      predicatet "]
   end[@@ocaml.doc
        " {2 List module}\n\n    This module contains many safe functions for manipulating lists.\n"]
-#721 "prelude.iml"
+#723 "prelude.iml"
 let (@) = List.append[@@ocaml.doc " Infix alias to {!List.append} "]
-#724 "prelude.iml"
-let (--) = List.(--)[@@ocaml.doc " Alias to {!List.(--)} "]
 #726 "prelude.iml"
+let (--) = List.(--)[@@ocaml.doc " Alias to {!List.(--)} "]
+#728 "prelude.iml"
 module Int =
   struct
     type t = int
@@ -540,9 +542,9 @@ module Int =
       (if i >= j then (f i; for_down_to (i - (Z.of_nativeint 1n)) j f) : 
       unit)[@@program ]
   end
-#777 "prelude.iml"
+#779 "prelude.iml"
 module Bool = struct type t = bool end
-#784 "prelude.iml"
+#786 "prelude.iml"
 module Array =
   struct
     include Caml.Array[@@ocaml.doc
@@ -559,7 +561,7 @@ module Array =
     let blit a i b j len =
       Caml.Array.blit a (Z.to_int i) b (Z.to_int j) (Z.to_int len)
   end[@@ocaml.doc " {2 Arrays}\n\n   Program mode only "][@@program ]
-#806 "prelude.iml"
+#808 "prelude.iml"
 module Option =
   struct
     type 'a t = 'a option
@@ -587,7 +589,7 @@ module Option =
     let (<$>) = map[@@ocaml.doc " [f <$> x = map f x] "]
   end[@@ocaml.doc
        " {2 Option module}\n\n    The option type [type 'a option = None | Some of 'a] is useful for\n    representing partial functions and optional values.\n    "]
-#890 "prelude.iml"
+#892 "prelude.iml"
 module Real =
   struct
     type t = real
@@ -615,7 +617,7 @@ module Real =
     let to_string = Q.to_string[@@program ]
     let to_string_approx x = string_of_float @@ (Q.to_float x)[@@program ]
   end
-#932 "prelude.iml"
+#934 "prelude.iml"
 module Map :
   sig
     type (+'a, 'b) t
@@ -731,7 +733,7 @@ module Map :
              m.default (Format.pp_print_list ~pp_sep pp_pair) m.l : unit)
       [@@program ]
   end 
-#1091 "prelude.iml"
+#1093 "prelude.iml"
 module Multiset :
   sig
     type +'a t = ('a, int) Map.t
@@ -756,9 +758,9 @@ module Multiset :
       function | [] -> empty | x::tail -> (add x) @@ (of_list tail)
   end [@@ocaml.doc
         " {2 Multiset}\n\n    A multiset is a collection of elements that don't have any particular\n    order, but can occur several times (unlike a regular set). "]
-#1117 "prelude.iml"
-[@@@ocaml.text " {2 Sets} "]
 #1119 "prelude.iml"
+[@@@ocaml.text " {2 Sets} "]
+#1121 "prelude.iml"
 module Set :
   sig
     type +'a t = ('a, bool) Map.t
@@ -834,7 +836,7 @@ module Set :
                 ~pp_sep:(fun out -> fun () -> Format.fprintf out ";@ ") pp_x)
              l : unit)[@@program ]
   end 
-#1239 "prelude.iml"
+#1241 "prelude.iml"
 module String :
   sig
     type t = string
@@ -899,17 +901,17 @@ module String :
         " Parse a string into a nonnegative number, or return [None] "]
   end [@@ocaml.doc
         " {2 Byte strings}\n\n    These strings correspond to OCaml native strings, and do not have\n    a particular unicode encoding.\n\n    Rather, they should be seen as sequences of bytes, and it is also\n    this way that Imandra considers them.\n"]
-#1346 "prelude.iml"
+#1348 "prelude.iml"
 let (^) = String.append[@@ocaml.doc " Alias to {!String.append} "]
-#1349 "prelude.iml"
+#1351 "prelude.iml"
 let succ x = x + (Z.of_nativeint 1n)[@@ocaml.doc " Next integer "]
-#1352 "prelude.iml"
-let pred x = x - (Z.of_nativeint 1n)[@@ocaml.doc " Previous integer "]
 #1354 "prelude.iml"
+let pred x = x - (Z.of_nativeint 1n)[@@ocaml.doc " Previous integer "]
+#1356 "prelude.iml"
 let fst (x, _) = x
-#1355 "prelude.iml"
-let snd (_, y) = y
 #1357 "prelude.iml"
+let snd (_, y) = y
+#1359 "prelude.iml"
 module Float =
   struct
     type t = float
@@ -961,7 +963,7 @@ module Float =
     let rem : t -> t -> t = Caml.mod_float
     let sqrt : t -> t = Caml.sqrt
   end
-#1416 "prelude.iml"
+#1418 "prelude.iml"
 module Reflect =
   struct
     module Uid =
@@ -1084,6 +1086,5 @@ module Reflect =
                 body[@@program ]
       end
   end[@@ocaml.doc " {2 Reflection} "]
-#1560 "prelude.iml"
+#1562 "prelude.iml"
 module Pervasives = struct  end
-
