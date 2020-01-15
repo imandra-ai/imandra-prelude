@@ -991,11 +991,13 @@ struct
   module Type =
   struct
     type t =
+      | Var of string 
       | Arrow of string * t * t 
       | Tuple of t list 
       | Constr of Uid.t * t list 
     let rec pp out (x : t) =
       (match x with
+       | Var s -> CCFormat.string out s
        | Tuple l ->
          CCFormat.fprintf out "(@[%a@])"
            (let open CCFormat in list ~sep:(return ",@ ") pp) l
