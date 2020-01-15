@@ -976,11 +976,13 @@ module Reflect =
     module Type =
       struct
         type t =
+          | Var of string 
           | Arrow of string * t * t 
           | Tuple of t list 
           | Constr of Uid.t * t list 
         let rec pp out (x : t) =
           (match x with
+           | Var s -> CCFormat.string out s
            | Tuple l ->
                CCFormat.fprintf out "(@[%a@])"
                  (let open CCFormat in list ~sep:(return ",@ ") pp) l
@@ -1084,7 +1086,9 @@ module Reflect =
           | Fun (v, body) ->
               CCFormat.fprintf out "(@[<1>fun %a ->@ %a@])" Var.pp_name v pp
                 body[@@program ]
+        let to_string t = CCFormat.asprintf "%a@?" pp t[@@program ]
       end
   end[@@ocaml.doc " {2 Reflection} "]
-#1562 "prelude.iml"
+#1566 "prelude.iml"
 module Pervasives = struct  end
+
