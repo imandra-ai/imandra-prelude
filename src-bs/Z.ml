@@ -33,7 +33,7 @@ external sub : t -> t -> t = "subtract" [@@bs.send]
 
 external abs : t -> t = "abs" [@@bs.send]
 
-external equal : t -> t -> bool = "equal" [@@bs.send]
+external equal : t -> t -> bool = "equals" [@@bs.send]
 
 let sign x =
   if x > zero then 1 else if x = zero then 0 else -1
