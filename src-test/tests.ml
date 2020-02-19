@@ -21,5 +21,15 @@ let () =
   run_test "Int negative mod" (fun () ->
       expect_z_eq (Imandra_prelude.Int.(mod) (Z.of_string "-10") (Z.of_string "3")) (Z.of_string "2"));
 
+  run_test "Poly gt" (fun () ->
+      expect_ (Imandra_prelude.(>) (Z.of_string "2") (Z.of_string "0")));
+
   run_test "Poly lt" (fun () ->
-      expect_ (Imandra_prelude.(<) (Z.of_string "0") (Z.of_string "2")))
+      expect_ (Imandra_prelude.(<) (Z.of_string "0") (Z.of_string "2")));
+
+  run_test "Poly =" (fun () ->
+      expect_ (Imandra_prelude.(=) (Z.of_string "0") (Z.of_string "2")));
+
+  run_test "Equal" (fun () ->
+      expect_ (Z.(=) (Z.of_nativeint 3n) (Z.of_nativeint 3n))
+    )

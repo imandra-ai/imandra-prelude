@@ -18,7 +18,7 @@ external (-) : t -> t -> t = "subtract" [@@bs.send]
 external (~-) : t -> t = "negate" [@@bs.send]
 external (~+) : t -> t = "%identity"
 external ( * ) : t -> t -> t = "multiply" [@@bs.send]
-external (=) : t -> t -> bool = "eq" [@@bs.send]
+external (=) : t -> t -> bool = "equals" [@@bs.send]
 
 external (mod) : t -> t -> t = "mod" [@@bs.send]
 
@@ -33,7 +33,7 @@ external sub : t -> t -> t = "subtract" [@@bs.send]
 
 external abs : t -> t = "abs" [@@bs.send]
 
-external equal : t -> t -> bool = "eq" [@@bs.send]
+external equal : t -> t -> bool = "equal" [@@bs.send]
 
 let sign x =
   if x > zero then 1 else if x = zero then 0 else -1
