@@ -4,7 +4,7 @@ type 'a printer = Format.formatter -> 'a -> unit
 #7 "prelude.iml"
 module Caml =
   struct
-    include Pervasives
+    include Stdlib
     type use_normal_equality
     let (==) _ _ = (assert false : use_normal_equality)
     let (!=) _ _ = (assert false : use_normal_equality)
@@ -53,9 +53,11 @@ module Caml =
         val pred : t -> t
         val of_int : int -> t
       end = struct type t = int
-                   include Pervasives
-                   let of_int i = i end 
+                   include Stdlib
+                   let of_int i = i end
   end
+#70 "prelude.iml"
+module Imandra_caml = Caml
 #72 "prelude.iml"
 module Caml_unix = Unix
 #73 "prelude.iml"
@@ -78,79 +80,79 @@ type nonrec string = string
 #107 "prelude.iml"
 type nonrec nativeint = nativeint[@@opaque ]
 #110 "prelude.iml"
-let (=) = Pervasives.(=)[@@ocaml.doc
-                          " Equality. Must be applied to non-function types. "]
-#112 "prelude.iml"
-let (<) : int -> int -> bool = (<)
+let (=) = Stdlib.(=)[@@ocaml.doc
+                      " Equality. Must be applied to non-function types. "]
 #113 "prelude.iml"
-let (<=) : int -> int -> bool = (<=)
+let (<) : int -> int -> bool = (<)
 #114 "prelude.iml"
-let (>) : int -> int -> bool = (>)
+let (<=) : int -> int -> bool = (<=)
 #115 "prelude.iml"
-let (>=) : int -> int -> bool = (>=)
+let (>) : int -> int -> bool = (>)
 #116 "prelude.iml"
-let min : int -> int -> int = min
+let (>=) : int -> int -> bool = (>=)
 #117 "prelude.iml"
+let min : int -> int -> int = min
+#118 "prelude.iml"
 let max : int -> int -> int = max
-#119 "prelude.iml"
-let (<.) : real -> real -> bool = Q.lt
 #120 "prelude.iml"
-let (<=.) : real -> real -> bool = Q.leq
+let (<.) : real -> real -> bool = Q.lt
 #121 "prelude.iml"
-let (>.) : real -> real -> bool = Q.gt
+let (<=.) : real -> real -> bool = Q.leq
 #122 "prelude.iml"
-let (>=.) : real -> real -> bool = Q.geq
+let (>.) : real -> real -> bool = Q.gt
 #123 "prelude.iml"
-let min_r : real -> real -> real = Q.min
+let (>=.) : real -> real -> bool = Q.geq
 #124 "prelude.iml"
+let min_r : real -> real -> real = Q.min
+#125 "prelude.iml"
 let max_r : real -> real -> real = Q.max
-#126 "prelude.iml"
-let (<>) = Pervasives.(<>)
 #127 "prelude.iml"
-let not = let open Pervasives in not
+let (<>) = Stdlib.(<>)
 #128 "prelude.iml"
-let implies x y = if x then y else true
+let not = let open Stdlib in not
 #129 "prelude.iml"
-let explies x y = implies y x
+let implies x y = if x then y else true
 #130 "prelude.iml"
+let explies x y = implies y x
+#131 "prelude.iml"
 let iff x y = (implies x y) && (implies y x)
-#132 "prelude.iml"
-let (+) = Z.(+)
 #133 "prelude.iml"
-let (~-) = Z.(~-)
+let (+) = Z.(+)
 #134 "prelude.iml"
-let abs (x : int) = if x >= (Z.of_nativeint 0n) then x else - x
+let (~-) = Z.(~-)
 #135 "prelude.iml"
+let abs (x : int) = if x >= (Z.of_nativeint 0n) then x else - x
+#136 "prelude.iml"
 let mk_nat (x : int) =
   (if x >= (Z.of_nativeint 0n) then x else Z.of_nativeint 0n : int)
-#137 "prelude.iml"
-let (-) = Z.(-)
 #138 "prelude.iml"
-let (~+) (x : Z.t) = x
+let (-) = Z.(-)
 #139 "prelude.iml"
+let (~+) (x : Z.t) = x
+#140 "prelude.iml"
 let ( * ) = Z.( * )
-#143 "prelude.iml"
+#144 "prelude.iml"
 let (/) = Z.ediv[@@ocaml.doc
                   " Euclidian division on integers,\n    see {{: http://smtlib.cs.uiowa.edu/theories-Ints.shtml} http://smtlib.cs.uiowa.edu/theories-Ints.shtml} "]
-#146 "prelude.iml"
+#147 "prelude.iml"
 let (mod) = Z.erem[@@ocaml.doc " Euclidian remainder on integers "]
-#150 "prelude.iml"
+#151 "prelude.iml"
 let const x _ = x[@@ocaml.doc
                    " [const x y] returns [x]. In other words, [const x] is\n    the constant function that always returns [x]. "]
-#153 "prelude.iml"
+#154 "prelude.iml"
 let compare (x : int) (y : int) =
   if x = y
   then Z.of_nativeint 0n
   else if x < y then Z.of_nativeint (-1n) else Z.of_nativeint 1n[@@ocaml.doc
                                                                   " Total order "]
-#155 "prelude.iml"
+#156 "prelude.iml"
 [@@@ocaml.text " {2 Ordinals} "]
-#160 "prelude.iml"
+#161 "prelude.iml"
 module Ordinal :
   sig
     type t =
-      | Int of int 
-      | Cons of t * int * t 
+      | Int of int
+      | Cons of t * int * t
     val pp : Format.formatter -> t -> unit
     val of_int : int -> t
     val (~$) : int -> t
@@ -171,7 +173,7 @@ module Ordinal :
   end =
   struct
     type t =
-      | Int of int 
+      | Int of int
       | Cons of t * int * t
       [@ocaml.doc
         " [cons a x tl] is [x\194\183(\207\137^a) + tl], where [tl < \207\137\194\183a], [a\226\137\1600], [x\226\137\1600] "]
@@ -213,7 +215,7 @@ module Ordinal :
        | (Cons _, Int _) -> false
        | (Cons (a1, x1, tl1), Cons (a2, x2, tl2)) ->
            (a1 << a2) ||
-             ((a1 = a2) && ((x1 < x2) || ((x1 = x2) && (tl1 << tl2)))) : 
+             ((a1 = a2) && ((x1 < x2) || ((x1 = x2) && (tl1 << tl2)))) :
       bool)[@@ocaml.doc
              " Special axiom: the original well founded relation we use\n      for proving all the other functions terminating. "]
     let rec plus (x : t) (y : t) =
@@ -235,7 +237,7 @@ module Ordinal :
        else
          (match x with
           | Int x -> Cons (n, x, zero)
-          | Cons (a, x, tl) -> Cons ((plus a n), x, (shift tl ~by:n))) : 
+          | Cons (a, x, tl) -> Cons ((plus a n), x, (shift tl ~by:n))) :
       t)
     let pair (x : t) (y : t) =
       (match x with
@@ -258,7 +260,7 @@ module Ordinal :
        | x::y::[] -> plus (shift ~by:one x) y
        | x::y::z::[] -> plus (shift ~by:two x) (plus (shift ~by:one y) z)
        | x::y::z::tl ->
-           of_list_rec (plus (shift ~by:two x) (plus (shift ~by:one y) z)) tl : 
+           of_list_rec (plus (shift ~by:two x) (plus (shift ~by:one y) z)) tl :
       t)
     let count (x : 'a) = (Caml.count_function_actual_implem x : t)[@@opaque ]
     let rec is_valid_rec (x : t) =
@@ -274,7 +276,7 @@ module Ordinal :
                         | Int _ -> true))))) : bool)[@@ocaml.doc
                                                       " Is this a valid ordinal? "]
     let is_valid (x : t) =
-      (match x with | Int x -> x >= (Z.of_nativeint 0n) | o -> is_valid_rec o : 
+      (match x with | Int x -> x >= (Z.of_nativeint 0n) | o -> is_valid_rec o :
       bool)[@@ocaml.doc " Is this a valid ordinal? "]
     let (+) = plus
     let (~$) = of_int
@@ -282,12 +284,12 @@ module Ordinal :
     let omega_omega = shift omega omega
   end [@@ocaml.doc
         " We need to define ordinals before any recursive function is defined,\n    because ordinals are used for termination proofs.\n"]
-#362 "prelude.iml"
+#363 "prelude.iml"
 module Peano_nat =
   struct
     type t =
-      | Z 
-      | S of t 
+      | Z
+      | S of t
     let zero = Z
     let succ x = S x
     let rec of_int i =
@@ -311,17 +313,17 @@ module Peano_nat =
     let (<=) = leq
     let (+) = plus
   end[@@ocaml.doc " {2 Natural numbers} "]
-#394 "prelude.iml"
+#395 "prelude.iml"
 [@@@ocaml.text " {2 Other builtin types} "]
-#396 "prelude.iml"
+#397 "prelude.iml"
 type nonrec unit = unit =
-  | () 
-#400 "prelude.iml"
-type ('a, 'b) result = ('a, 'b) Pervasives.result =
-  | Ok of 'a 
+  | ()
+#401 "prelude.iml"
+type ('a, 'b) result = ('a, 'b) Stdlib.result =
+  | Ok of 'a
   | Error of 'b [@@ocaml.doc
                   " Result type, representing either a successul result [Ok x]\n    or an error [Error x]. "]
-#402 "prelude.iml"
+#403 "prelude.iml"
 module Result =
   struct
     type ('a, 'b) t = ('a, 'b) result
@@ -341,42 +343,36 @@ module Result =
     let is_ok = function | Ok _ -> true | Error _ -> false
     let is_error = function | Ok _ -> false | Error _ -> true
   end
-#453 "prelude.iml"
+#454 "prelude.iml"
 type ('a, 'b) either =
-  | Left of 'a 
+  | Left of 'a
   | Right of 'b [@@ocaml.doc " A familiar type for Haskellers "]
-#462 "prelude.iml"
+#463 "prelude.iml"
 let (|>) x f = f x[@@ocaml.doc
                     " Pipeline operator.\n\n    [x |> f] is the same as [f x], but it composes nicely:\n    [ x |> f |> g |> h] can be more readable than [h(g(f x))].\n"]
-#469 "prelude.iml"
+#470 "prelude.iml"
 let (@@) f x = f x[@@ocaml.doc
                     " Right-associative application operator.\n\n    [f @@ x] is the same as [f x], but it binds to the right:\n    [f @@ g @@ h @@ x] is the same as [f (g (h x))] but with fewer parentheses.\n"]
-#472 "prelude.iml"
+#473 "prelude.iml"
 let id x = x[@@ocaml.doc " Identity function. [id x = x] always holds. "]
-#477 "prelude.iml"
+#478 "prelude.iml"
 let (%>) f g x = g (f x)[@@ocaml.doc
                           " Mathematical composition operator.\n\n    [f %> g] is [fun x -> g (f x)] "]
-#481 "prelude.iml"
-let (==) = Caml.(==)[@@program ]
 #482 "prelude.iml"
+let (==) = Caml.(==)[@@program ]
+#483 "prelude.iml"
 let (!=) = Caml.(!=)[@@program ]
-#484 "prelude.iml"
-let (+.) : real -> real -> real = Q.(+)
 #485 "prelude.iml"
-let (-.) : real -> real -> real = Q.(-)
+let (+.) : real -> real -> real = Q.(+)
 #486 "prelude.iml"
-let (~-.) = Q.neg
+let (-.) : real -> real -> real = Q.(-)
 #487 "prelude.iml"
-let ( *. ) : real -> real -> real = Q.( * )
+let (~-.) = Q.neg
 #488 "prelude.iml"
+let ( *. ) : real -> real -> real = Q.( * )
+#489 "prelude.iml"
 let (/.) : real -> real -> real = Q.(/)
-#490 "prelude.iml"
-let (==>) a b = implies a b
-#491 "prelude.iml"
-let (<==) a b = explies a b
-#492 "prelude.iml"
-let (<==>) a b = iff a b
-#502 "prelude.iml"
+#505 "prelude.iml"
 module List =
   struct
     type 'a t = 'a list
@@ -499,20 +495,28 @@ module List =
       | y::tail -> y :: (insert_sorted ~leq x tail)[@@ocaml.doc
                                                      " Insert [x] in [l], keeping [l] sorted. "]
     let sort ~leq  l =
-      (fold_left (fun acc -> fun x -> insert_sorted ~leq x acc) [] l : 
+      (fold_left (fun acc -> fun x -> insert_sorted ~leq x acc) [] l :
       _ list)[@@ocaml.doc " Basic sorting function "]
     let rec is_sorted ~leq  =
       function
       | []|_::[] -> true
       | x::(y::_ as tail) -> (leq x y) && (is_sorted ~leq tail)[@@ocaml.doc
                                                                  " Check whether a list is sorted, using the [leq] small-or-equal-than\n      predicatet "]
+    let monoid_product l1 l2 =
+      flat_map (fun x -> map (fun y -> (x, y)) l2) l1
+    let (>|=) o f = map f o
+    let (>>=) o f = flat_map f o
+    let (let+) = (>|=)
+    let (and+) = monoid_product
+    let ( let* ) = (>>=)
+    let ( and* ) = monoid_product
   end[@@ocaml.doc
        " {2 List module}\n\n    This module contains many safe functions for manipulating lists.\n"]
-#729 "prelude.iml"
+#743 "prelude.iml"
 let (@) = List.append[@@ocaml.doc " Infix alias to {!List.append} "]
-#732 "prelude.iml"
+#746 "prelude.iml"
 let (--) = List.(--)[@@ocaml.doc " Alias to {!List.(--)} "]
-#734 "prelude.iml"
+#748 "prelude.iml"
 module Int =
   struct
     type t = int
@@ -536,19 +540,19 @@ module Int =
       then Z.of_nativeint 0n
       else if x < y then Z.of_nativeint (-1n) else Z.of_nativeint 1n
     let equal = (=)
-    let compare = Pervasives.compare[@@program ]
+    let compare = Stdlib.compare[@@program ]
     let pp = Z.pp_print[@@program ]
     let of_caml_int = Z.of_int[@@program ]
     let rec for_ i j f =
       (if i <= j then (f i; for_ (i + (Z.of_nativeint 1n)) j f) : unit)
       [@@program ]
     let rec for_down_to i j f =
-      (if i >= j then (f i; for_down_to (i - (Z.of_nativeint 1n)) j f) : 
+      (if i >= j then (f i; for_down_to (i - (Z.of_nativeint 1n)) j f) :
       unit)[@@program ]
   end
-#785 "prelude.iml"
+#799 "prelude.iml"
 module Bool = struct type t = bool end
-#792 "prelude.iml"
+#806 "prelude.iml"
 module Array =
   struct
     include Caml.Array[@@ocaml.doc
@@ -565,7 +569,7 @@ module Array =
     let blit a i b j len =
       Caml.Array.blit a (Z.to_int i) b (Z.to_int j) (Z.to_int len)
   end[@@ocaml.doc " {2 Arrays}\n\n   Program mode only "][@@program ]
-#814 "prelude.iml"
+#828 "prelude.iml"
 module Option =
   struct
     type 'a t = 'a option
@@ -591,9 +595,15 @@ module Option =
     let get_or ~default  x = match x with | None -> default | Some y -> y
     let fold f acc o = match o with | None -> acc | Some x -> f acc x
     let (<$>) = map[@@ocaml.doc " [f <$> x = map f x] "]
+    let monoid_product a b =
+      match (a, b) with | (Some x, Some y) -> Some (x, y) | _ -> None
+    let (let+) = (>|=)
+    let (and+) = monoid_product
+    let ( let* ) = (>>=)
+    let ( and* ) = monoid_product
   end[@@ocaml.doc
        " {2 Option module}\n\n    The option type [type 'a option = None | Some of 'a] is useful for\n    representing partial functions and optional values.\n    "]
-#898 "prelude.iml"
+#921 "prelude.iml"
 module Real =
   struct
     type t = real
@@ -621,7 +631,7 @@ module Real =
     let to_string = Q.to_string[@@program ]
     let to_string_approx x = string_of_float @@ (Q.to_float x)[@@program ]
   end
-#940 "prelude.iml"
+#963 "prelude.iml"
 module Map :
   sig
     type (+'a, 'b) t
@@ -689,11 +699,11 @@ module Map :
              (match f x v with | None -> tl | Some v' -> (x, v') :: tl) in
        { default = (default m.default); l = (aux m.l) } : _ t)[@@program ]
     let for_all ~default  ~f  m =
-      ((default m.default) && (List.for_all (fun (x, v) -> f x v) m.l) : 
+      ((default m.default) && (List.for_all (fun (x, v) -> f x v) m.l) :
       bool)[@@program ]
     let merge ~default  ~f_both  ~f1  ~f2  (s1 : ('a, 'b) t)
       (s2 : ('a, 'c) t) =
-      (let open Pervasives in
+      (let open Stdlib in
          let rec aux l1 l2 =
            match (l1, l2) with
            | ([], []) -> []
@@ -722,7 +732,7 @@ module Map :
                     match f2 x2 v2 with
                     | None -> tl
                     | Some v -> (x2, v) :: tl) in
-         { default = (default s1.default s2.default); l = (aux s1.l s2.l) } : 
+         { default = (default s1.default s2.default); l = (aux s1.l s2.l) } :
       ('a, 'd) t)[@@program ]
     let extract (m : ('a, 'b) t) =
       (((m.l), (m.default)) : (('a * 'b) list * 'b))[@@program ]
@@ -736,8 +746,8 @@ module Map :
            Format.fprintf out "(@[Map.of_list@ ~default:%a@ [@[%a@]]@])" pp_v
              m.default (Format.pp_print_list ~pp_sep pp_pair) m.l : unit)
       [@@program ]
-  end 
-#1099 "prelude.iml"
+  end
+#1122 "prelude.iml"
 module Multiset :
   sig
     type +'a t = ('a, int) Map.t
@@ -762,9 +772,9 @@ module Multiset :
       function | [] -> empty | x::tail -> (add x) @@ (of_list tail)
   end [@@ocaml.doc
         " {2 Multiset}\n\n    A multiset is a collection of elements that don't have any particular\n    order, but can occur several times (unlike a regular set). "]
-#1125 "prelude.iml"
+#1148 "prelude.iml"
 [@@@ocaml.text " {2 Sets} "]
-#1127 "prelude.iml"
+#1150 "prelude.iml"
 module Set :
   sig
     type +'a t = ('a, bool) Map.t
@@ -803,7 +813,7 @@ module Set :
                      fun v2 -> assert (not v1); assert (not v2); false)
          ~f1:(fun _ -> fun _ -> None) ~f2:(fun _ -> fun _ -> None)
          ~f_both:(fun _ ->
-                    fun s1 -> fun s2 -> if s1 && s2 then Some true else None) : 
+                    fun s1 -> fun s2 -> if s1 && s2 then Some true else None) :
       'a t)[@@program ]
     let inter = inter_
     let union_ (s1 : 'a t) (s2 : 'a t) =
@@ -830,7 +840,7 @@ module Set :
     let rec of_list = function | [] -> empty | x::tl -> add x (of_list tl)
     let to_list (s : 'a t) =
       (let (l, _) = Map.extract s in
-       CCList.filter_map (fun (x, b) -> if b then Some x else None) l : 
+       CCList.filter_map (fun (x, b) -> if b then Some x else None) l :
       'a list)[@@program ]
     let (++) = union
     let (--) = diff
@@ -842,8 +852,8 @@ module Set :
              (Format.pp_print_list
                 ~pp_sep:(fun out -> fun () -> Format.fprintf out ";@ ") pp_x)
              l : unit)[@@program ]
-  end 
-#1256 "prelude.iml"
+  end
+#1279 "prelude.iml"
 module String :
   sig
     type t = string
@@ -872,8 +882,8 @@ module String :
     let make (i : Caml.Int.t) c = (String.make i c : t)[@@ocaml.doc
                                                          " [make i c] makes a string containing [i] times the char [c] "]
       [@@program ]
-    let append : t -> t -> t = Pervasives.(^)[@@ocaml.doc
-                                               " String concatenation "]
+    let append : t -> t -> t = Stdlib.(^)[@@ocaml.doc
+                                           " String concatenation "]
     let get = Caml.String.get[@@program ]
     let rec concat sep (l : t list) =
       (match l with
@@ -908,17 +918,17 @@ module String :
         " Parse a string into a nonnegative number, or return [None] "]
   end [@@ocaml.doc
         " {2 Byte strings}\n\n    These strings correspond to OCaml native strings, and do not have\n    a particular unicode encoding.\n\n    Rather, they should be seen as sequences of bytes, and it is also\n    this way that Imandra considers them.\n"]
-#1363 "prelude.iml"
+#1386 "prelude.iml"
 let (^) = String.append[@@ocaml.doc " Alias to {!String.append} "]
-#1366 "prelude.iml"
+#1389 "prelude.iml"
 let succ x = x + (Z.of_nativeint 1n)[@@ocaml.doc " Next integer "]
-#1369 "prelude.iml"
+#1392 "prelude.iml"
 let pred x = x - (Z.of_nativeint 1n)[@@ocaml.doc " Previous integer "]
-#1371 "prelude.iml"
+#1394 "prelude.iml"
 let fst (x, _) = x
-#1372 "prelude.iml"
+#1395 "prelude.iml"
 let snd (_, y) = y
-#1374 "prelude.iml"
+#1397 "prelude.iml"
 module Float =
   struct
     type t = float
@@ -926,12 +936,12 @@ module Float =
       struct
         type t =
           | Nearest_ties_to_even [@ocaml.doc " default "]
-          | Nearest_ties_to_away 
-          | Towards_positive 
-          | Towards_negative 
-          | Towards_zero 
+          | Nearest_ties_to_away
+          | Towards_positive
+          | Towards_negative
+          | Towards_zero
         let _ = fun (x : t) -> x = x[@@imandra_verify ]
-      end 
+      end
     let of_int = Z.to_float[@@program ]
     let of_string = Caml.float_of_string[@@program ]
     let (~-) : t -> t = Caml.(~-.)
@@ -949,28 +959,27 @@ module Float =
     let (<>) : t -> t -> bool = Caml.(<>)
     let neg : t -> t = (~-)
     let abs : t -> t = Caml.abs_float
-    let is_zero (x : t) =
-      (Pervasives.(=) x (Caml.float_of_string "0.") : bool)
+    let is_zero (x : t) = (Stdlib.(=) x (Caml.float_of_string "0.") : bool)
     let is_nan (x : t) =
-      (Pervasives.(=) (Caml.classify_float x) Caml.FP_nan : bool)
+      (Stdlib.(=) (Caml.classify_float x) Caml.FP_nan : bool)
     let is_infinite (x : t) =
-      (Pervasives.(=) (Caml.classify_float x) Caml.FP_infinite : bool)
+      (Stdlib.(=) (Caml.classify_float x) Caml.FP_infinite : bool)
     let is_normal (x : t) =
-      (Pervasives.(=) (Caml.classify_float x) Caml.FP_normal : bool)
+      (Stdlib.(=) (Caml.classify_float x) Caml.FP_normal : bool)
     let is_subnormal (x : t) =
-      (Pervasives.(=) (Caml.classify_float x) Caml.FP_subnormal : bool)
+      (Stdlib.(=) (Caml.classify_float x) Caml.FP_subnormal : bool)
     let is_positive (x : t) = (x > (Caml.float_of_string "0.") : bool)
     let is_negative (x : t) = (x < (Caml.float_of_string "0.") : bool)
     let min (x : t) (y : t) =
-      (if is_nan x then y else if is_nan y then x else Caml.min x y : 
+      (if is_nan x then y else if is_nan y then x else Caml.min x y :
       t)
     let max (x : t) (y : t) =
-      (if is_nan x then y else if is_nan y then x else Caml.max x y : 
+      (if is_nan x then y else if is_nan y then x else Caml.max x y :
       t)
     let rem : t -> t -> t = Caml.mod_float
     let sqrt : t -> t = Caml.sqrt
   end
-#1433 "prelude.iml"
+#1460 "prelude.iml"
 module Reflect =
   struct
     module Uid =
@@ -1008,10 +1017,10 @@ module Reflect =
     module Type =
       struct
         type t =
-          | Var of string 
-          | Arrow of string * t * t 
-          | Tuple of t list 
-          | Constr of Uid.t * t list 
+          | Var of string
+          | Arrow of string * t * t
+          | Tuple of t list
+          | Constr of Uid.t * t list
         let rec pp out (x : t) =
           (match x with
            | Var s -> CCFormat.string out s
@@ -1044,9 +1053,9 @@ module Reflect =
     module Term =
       struct
         type const =
-          | Const_string of string 
-          | Const_z of Int.t 
-          | Const_q of Real.t 
+          | Const_string of string
+          | Const_z of Int.t
+          | Const_q of Real.t
         let pp_const out =
           function
           | Const_string x -> CCFormat.fprintf out "%S" x
@@ -1054,23 +1063,23 @@ module Reflect =
           | Const_q x -> Real.pp out x[@@program ]
         type 'a binding = (Var.t * 'a)
         type t =
-          | Bool of bool 
-          | Const of const 
-          | If of t * t * t 
-          | Apply of t * t list 
-          | Ident of Uid.t 
-          | Tuple of t list 
+          | Bool of bool
+          | Const of const
+          | If of t * t * t
+          | Apply of t * t list
+          | Ident of Uid.t
+          | Tuple of t list
           | Let of {
           rec_: bool ;
           bindings: t binding list ;
-          body: t } 
-          | Tuple_field of int * t 
-          | Construct of Uid.t * t list 
-          | Destruct of Uid.t * int * t 
-          | Is_a of Uid.t * t 
-          | Field of Uid.t * t 
-          | Record of (Uid.t * t) list * t option 
-          | Fun of Var.t * t 
+          body: t }
+          | Tuple_field of int * t
+          | Construct of Uid.t * t list
+          | Destruct of Uid.t * int * t
+          | Is_a of Uid.t * t
+          | Field of Uid.t * t
+          | Record of (Uid.t * t) list * t option
+          | Fun of Var.t * t
         let dummy = Bool true[@@program ]
         let rec pp out =
           function
@@ -1125,6 +1134,7 @@ module Reflect =
         let to_string t = CCFormat.asprintf "%a@?" pp t[@@program ]
       end
   end[@@ocaml.doc " {2 Reflection} "]
-#1606 "prelude.iml"
+#1633 "prelude.iml"
 module Pervasives = struct  end
-
+#1634 "prelude.iml"
+module Stdlib = struct  end
