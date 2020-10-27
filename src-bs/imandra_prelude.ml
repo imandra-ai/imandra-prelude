@@ -310,10 +310,6 @@ module Result =
       | (Ok x, Ok y) -> Ok (x, y)
       | (Error e, _) -> Error e
       | (_, Error e) -> Error e
-    let (let+) = (>|=)
-    let (and+) = monoid_product
-    let ( let* ) = (>>=)
-    let ( and* ) = monoid_product
   end
 type ('a, 'b) either =
   | Left of 'a
@@ -465,10 +461,6 @@ module List =
       flat_map (fun x -> map (fun y -> (x, y)) l2) l1
     let (>|=) o f = map f o
     let (>>=) o f = flat_map f o
-    let (let+) = (>|=)
-    let (and+) = monoid_product
-    let ( let* ) = (>>=)
-    let ( and* ) = monoid_product
   end[@@ocaml.doc
        " {2 List module}\n\n    This module contains many safe functions for manipulating lists.\n"]
 let (@) = List.append[@@ocaml.doc " Infix alias to {!List.append} "]
@@ -550,10 +542,6 @@ module Option =
     let (<$>) = map[@@ocaml.doc " [f <$> x = map f x] "]
     let monoid_product a b =
       match (a, b) with | (Some x, Some y) -> Some (x, y) | _ -> None
-    let (let+) = (>|=)
-    let (and+) = monoid_product
-    let ( let* ) = (>>=)
-    let ( and* ) = monoid_product
   end[@@ocaml.doc
        " {2 Option module}\n\n    The option type [type 'a option = None | Some of 'a] is useful for\n    representing partial functions and optional values.\n    "]
 module Real =
