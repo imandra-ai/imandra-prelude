@@ -29,7 +29,7 @@ module Caml =
     let float_of_string = float_of_string
     let count_function_actual_implem (_ : 'a) =
       (failwith
-         "the `count` function is not evaluable, its only purpose is helping proving termination of function in Logic mode" : 
+         "the `count` function is not evaluable, its only purpose is helping proving termination of function in Logic mode" :
       'b)
     let sleep = Unix.sleep
     module Int :
@@ -317,12 +317,13 @@ module Peano_nat =
 [@@@ocaml.text " {2 Other builtin types} "]
 #397 "prelude.iml"
 type nonrec unit = unit =
-  | ()
+  | () [@@noalias ]
 #401 "prelude.iml"
 type ('a, 'b) result = ('a, 'b) Stdlib.result =
   | Ok of 'a
   | Error of 'b [@@ocaml.doc
                   " Result type, representing either a successul result [Ok x]\n    or an error [Error x]. "]
+[@@noalias ]
 #403 "prelude.iml"
 module Result =
   struct
@@ -342,37 +343,46 @@ module Result =
       match x with | Ok x -> ok x | Error s -> error s
     let is_ok = function | Ok _ -> true | Error _ -> false
     let is_error = function | Ok _ -> false | Error _ -> true
+    let monoid_product a b =
+      match (a, b) with
+      | (Ok x, Ok y) -> Ok (x, y)
+      | (Error e, _) -> Error e
+      | (_, Error e) -> Error e
+    let (let+) = (>|=)
+    let (and+) = monoid_product
+    let ( let* ) = (>>=)
+    let ( and* ) = monoid_product
   end
-#454 "prelude.iml"
+#465 "prelude.iml"
 type ('a, 'b) either =
   | Left of 'a
   | Right of 'b [@@ocaml.doc " A familiar type for Haskellers "]
-#463 "prelude.iml"
+#474 "prelude.iml"
 let (|>) x f = f x[@@ocaml.doc
                     " Pipeline operator.\n\n    [x |> f] is the same as [f x], but it composes nicely:\n    [ x |> f |> g |> h] can be more readable than [h(g(f x))].\n"]
-#470 "prelude.iml"
+#481 "prelude.iml"
 let (@@) f x = f x[@@ocaml.doc
                     " Right-associative application operator.\n\n    [f @@ x] is the same as [f x], but it binds to the right:\n    [f @@ g @@ h @@ x] is the same as [f (g (h x))] but with fewer parentheses.\n"]
-#473 "prelude.iml"
+#484 "prelude.iml"
 let id x = x[@@ocaml.doc " Identity function. [id x = x] always holds. "]
-#478 "prelude.iml"
+#489 "prelude.iml"
 let (%>) f g x = g (f x)[@@ocaml.doc
                           " Mathematical composition operator.\n\n    [f %> g] is [fun x -> g (f x)] "]
-#482 "prelude.iml"
+#493 "prelude.iml"
 let (==) = Caml.(==)[@@program ]
-#483 "prelude.iml"
+#494 "prelude.iml"
 let (!=) = Caml.(!=)[@@program ]
-#485 "prelude.iml"
+#496 "prelude.iml"
 let (+.) : real -> real -> real = Q.(+)
-#486 "prelude.iml"
+#497 "prelude.iml"
 let (-.) : real -> real -> real = Q.(-)
-#487 "prelude.iml"
+#498 "prelude.iml"
 let (~-.) = Q.neg
-#488 "prelude.iml"
+#499 "prelude.iml"
 let ( *. ) : real -> real -> real = Q.( * )
-#489 "prelude.iml"
+#500 "prelude.iml"
 let (/.) : real -> real -> real = Q.(/)
-#505 "prelude.iml"
+#516 "prelude.iml"
 module List =
   struct
     type 'a t = 'a list
@@ -512,11 +522,11 @@ module List =
     let ( and* ) = monoid_product
   end[@@ocaml.doc
        " {2 List module}\n\n    This module contains many safe functions for manipulating lists.\n"]
-#743 "prelude.iml"
+#754 "prelude.iml"
 let (@) = List.append[@@ocaml.doc " Infix alias to {!List.append} "]
-#746 "prelude.iml"
+#757 "prelude.iml"
 let (--) = List.(--)[@@ocaml.doc " Alias to {!List.(--)} "]
-#748 "prelude.iml"
+#759 "prelude.iml"
 module Int =
   struct
     type t = int
@@ -550,9 +560,9 @@ module Int =
       (if i >= j then (f i; for_down_to (i - (Z.of_nativeint 1n)) j f) :
       unit)[@@program ]
   end
-#799 "prelude.iml"
+#810 "prelude.iml"
 module Bool = struct type t = bool end
-#806 "prelude.iml"
+#817 "prelude.iml"
 module Array =
   struct
     include Caml.Array[@@ocaml.doc
@@ -569,7 +579,7 @@ module Array =
     let blit a i b j len =
       Caml.Array.blit a (Z.to_int i) b (Z.to_int j) (Z.to_int len)
   end[@@ocaml.doc " {2 Arrays}\n\n   Program mode only "][@@program ]
-#828 "prelude.iml"
+#839 "prelude.iml"
 module Option =
   struct
     type 'a t = 'a option
@@ -603,7 +613,7 @@ module Option =
     let ( and* ) = monoid_product
   end[@@ocaml.doc
        " {2 Option module}\n\n    The option type [type 'a option = None | Some of 'a] is useful for\n    representing partial functions and optional values.\n    "]
-#921 "prelude.iml"
+#932 "prelude.iml"
 module Real =
   struct
     type t = real
@@ -631,7 +641,7 @@ module Real =
     let to_string = Q.to_string[@@program ]
     let to_string_approx x = string_of_float @@ (Q.to_float x)[@@program ]
   end
-#963 "prelude.iml"
+#974 "prelude.iml"
 module Map :
   sig
     type (+'a, 'b) t
@@ -747,7 +757,7 @@ module Map :
              m.default (Format.pp_print_list ~pp_sep pp_pair) m.l : unit)
       [@@program ]
   end
-#1122 "prelude.iml"
+#1133 "prelude.iml"
 module Multiset :
   sig
     type +'a t = ('a, int) Map.t
@@ -772,9 +782,9 @@ module Multiset :
       function | [] -> empty | x::tail -> (add x) @@ (of_list tail)
   end [@@ocaml.doc
         " {2 Multiset}\n\n    A multiset is a collection of elements that don't have any particular\n    order, but can occur several times (unlike a regular set). "]
-#1148 "prelude.iml"
+#1159 "prelude.iml"
 [@@@ocaml.text " {2 Sets} "]
-#1150 "prelude.iml"
+#1161 "prelude.iml"
 module Set :
   sig
     type +'a t = ('a, bool) Map.t
@@ -853,7 +863,7 @@ module Set :
                 ~pp_sep:(fun out -> fun () -> Format.fprintf out ";@ ") pp_x)
              l : unit)[@@program ]
   end
-#1279 "prelude.iml"
+#1290 "prelude.iml"
 module String :
   sig
     type t = string
@@ -918,17 +928,17 @@ module String :
         " Parse a string into a nonnegative number, or return [None] "]
   end [@@ocaml.doc
         " {2 Byte strings}\n\n    These strings correspond to OCaml native strings, and do not have\n    a particular unicode encoding.\n\n    Rather, they should be seen as sequences of bytes, and it is also\n    this way that Imandra considers them.\n"]
-#1386 "prelude.iml"
-let (^) = String.append[@@ocaml.doc " Alias to {!String.append} "]
-#1389 "prelude.iml"
-let succ x = x + (Z.of_nativeint 1n)[@@ocaml.doc " Next integer "]
-#1392 "prelude.iml"
-let pred x = x - (Z.of_nativeint 1n)[@@ocaml.doc " Previous integer "]
-#1394 "prelude.iml"
-let fst (x, _) = x
-#1395 "prelude.iml"
-let snd (_, y) = y
 #1397 "prelude.iml"
+let (^) = String.append[@@ocaml.doc " Alias to {!String.append} "]
+#1400 "prelude.iml"
+let succ x = x + (Z.of_nativeint 1n)[@@ocaml.doc " Next integer "]
+#1403 "prelude.iml"
+let pred x = x - (Z.of_nativeint 1n)[@@ocaml.doc " Previous integer "]
+#1405 "prelude.iml"
+let fst (x, _) = x
+#1406 "prelude.iml"
+let snd (_, y) = y
+#1408 "prelude.iml"
 module Float =
   struct
     type t = float
@@ -979,7 +989,7 @@ module Float =
     let rem : t -> t -> t = Caml.mod_float
     let sqrt : t -> t = Caml.sqrt
   end
-#1460 "prelude.iml"
+#1471 "prelude.iml"
 module Reflect =
   struct
     module Uid =
@@ -1134,7 +1144,8 @@ module Reflect =
         let to_string t = CCFormat.asprintf "%a@?" pp t[@@program ]
       end
   end[@@ocaml.doc " {2 Reflection} "]
-#1633 "prelude.iml"
+#1645 "prelude.iml"
 module Pervasives = struct  end
-#1634 "prelude.iml"
+#1646 "prelude.iml"
 module Stdlib = struct  end
+
