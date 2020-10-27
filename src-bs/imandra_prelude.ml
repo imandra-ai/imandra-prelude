@@ -956,9 +956,6 @@ module Float =
 struct
   type t = float
   module Round : sig type t end =
-  struct
-    type t = float
-    module Round : sig type t end =
       struct
         type t =
           | Nearest_ties_to_even [@ocaml.doc " default "]
