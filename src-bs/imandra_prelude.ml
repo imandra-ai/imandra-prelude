@@ -39,7 +39,6 @@ module Caml =
       (failwith
          "the `count` function is not evaluable, its only purpose is helping proving termination of function in Logic mode" :
       'b)
-    let sleep = Unix.sleep
     module Int :
       sig
         type t = int
