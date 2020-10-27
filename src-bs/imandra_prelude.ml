@@ -1062,3 +1062,10 @@ module Reflect =
   end[@@ocaml.doc " {2 Reflection} "]
 
 include Pervasives
+
+let (<) : int -> int -> bool = Z.lt
+let (<=) : int -> int -> bool = Z.leq
+let (>) : int -> int -> bool = Z.gt
+let (>=) : int -> int -> bool = Z.geq
+let min : int -> int -> int = Z.min
+let max : int -> int -> int = Z.max
