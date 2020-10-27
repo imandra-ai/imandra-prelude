@@ -5,6 +5,9 @@
    - change numeric comparisons to operate on Z
 *)
 
+
+module Stdlib = Pervasives
+
 type 'a printer = Format.formatter -> 'a -> unit
 
 module Caml =
@@ -283,10 +286,6 @@ module Peano_nat =
 [@@@ocaml.text " {2 Other builtin types} "]
 type nonrec unit = unit =
   | () [@@noalias ]
-type ('a, 'b) result = ('a, 'b) Belt.Result.t =
-  | Ok of 'a
-  | Error of 'b [@@ocaml.doc
-  " Result type, representing either a successul result [Ok x]\n    or an error [Error x]. "]
 module Result =
   struct
     type ('a, 'b) t = ('a, 'b) result
@@ -1062,5 +1061,5 @@ module Reflect =
         let to_string t = CCFormat.asprintf "%a@?" pp t[@@program ]
       end
   end[@@ocaml.doc " {2 Reflection} "]
-module Pervasives = struct  end
-module Stdlib = struct  end
+
+include Pervasives
