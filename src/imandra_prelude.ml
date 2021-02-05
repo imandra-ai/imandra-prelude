@@ -1102,6 +1102,12 @@ module Reflect =
           | Field of Uid.t * t 
           | Record of (Uid.t * t) list * t option 
           | Fun of Var.t * t 
+          | Case of t * case list * t option 
+          | Let_tuple of Var.t list * t * t 
+        and case = {
+          case_cstor: Uid.t ;
+          case_vars: Var.t list ;
+          case_rhs: t }
         let dummy = Bool true[@@program ]
         let rec pp_ ~as_ocaml  out t =
           let pp = pp_ ~as_ocaml in
@@ -1155,35 +1161,61 @@ module Reflect =
                 i pp u
           | Destruct (c, i, n, None, u) ->
               CCFormat.fprintf out
-                "(@[@[<2>match %a@ with@]@ @[| %a%s ->@ x@]@ | _ -> assert false@])"
+                "(@[@[<2>match %a with@]@ @[| @[%a (%s) ->@ x@]@]@ | _ -> assert false@])"
                 pp u Uid.pp c
                 ((CCList.init (Z.to_int n)
                     (fun x -> if (Z.of_int x) = i then "x" else "_"))
                    |> (CCString.concat ","))
           | Destruct (c, i, _, Some lbl, u) ->
               CCFormat.fprintf out
-                "(@[@[<2>match %a@ with@]@ @[| %a {%a=x;_} ->@ x@]@ | _ -> assert false@])"
+                "(@[@[<2>match %a with@]@ @[| @[%a {%a=x;_} ->@ x@]@]@ | _ -> assert false@])"
                 pp u Uid.pp c Uid.pp lbl
           | Is_a (c, u) when not as_ocaml ->
               CCFormat.fprintf out "(@[is-%a@ %a@])" Uid.pp c pp u
           | Is_a (c, u) ->
               CCFormat.fprintf out
-                "(@[@[<2>match %a@ with@]@ @[| %a _ ->@ true@]@ | _ -> false@])"
+                "(@[@[<2>match %a with@]@ @[| %a _ -> true@]@ | _ -> false@])"
                 pp u Uid.pp c
           | Field (f, u) -> CCFormat.fprintf out "%a.%a" pp u Uid.pp f
           | Fun (v, body) ->
               CCFormat.fprintf out "(@[<1>fun %a ->@ %a@])" Var.pp_name v pp
-                body[@@program ]
+                body
+          | Case (u, cases, default) ->
+              let ppdef out () =
+                match default with
+                | None -> ()
+                | Some d -> CCFormat.fprintf out "@ | @[_ ->@ %a@]" pp d
+              and pp_case out (c : case) =
+                match c.case_vars with
+                | [] ->
+                    CCFormat.fprintf out "| @[%a ->@ %a@]" Uid.pp
+                      c.case_cstor pp c.case_rhs
+                | x::[] ->
+                    CCFormat.fprintf out "| @[@[%a %a@] ->@ %a@]" Uid.pp
+                      c.case_cstor Var.pp_name x pp c.case_rhs
+                | l ->
+                    CCFormat.fprintf out "| @[@[%a (%a)@] ->@ %a@]" Uid.pp
+                      c.case_cstor
+                      (CCFormat.list ~sep:(CCFormat.return ",@ ") Var.pp_name)
+                      l pp c.case_rhs in
+              CCFormat.fprintf out
+                "@[<hv2>@[<2>begin match %a with@]@ %a%a@;<1 -2>end@]" pp u
+                (CCFormat.list ~sep:(CCFormat.return "@ ") pp_case) cases
+                ppdef ()
+          | Let_tuple (vars, rhs, body) ->
+              CCFormat.fprintf out "@[<hv>@[<2>let %a = %a in@]@ %a@]"
+                (CCFormat.list ~sep:(CCFormat.return ",@,") Var.pp_name) vars
+                pp rhs pp body[@@program ]
         let pp = pp_ ~as_ocaml:false[@@program ]
         let pp_as_ocaml = pp_ ~as_ocaml:true[@@program ]
         let to_string t = CCFormat.asprintf "%a@?" pp t[@@program ]
       end
   end[@@ocaml.doc " {2 Reflection} "]
-#1672 "prelude.iml"
+#1704 "prelude.iml"
 let pp_list : _ CCFormat.printer -> _ list CCFormat.printer =
   CCFormat.Dump.list[@@program ]
-#1680 "prelude.iml"
+#1712 "prelude.iml"
 module Pervasives = struct  end
-#1681 "prelude.iml"
+#1713 "prelude.iml"
 module Stdlib = struct  end
 
