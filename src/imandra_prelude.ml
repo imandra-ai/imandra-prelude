@@ -1053,7 +1053,7 @@ module LString =
     type t = LChar.t list
     let empty : t = []
     let of_list l = l
-    let to_string s = (CCList.map LChar.to_char s) |> CCString.of_list
+    let to_string (s : t) = (CCList.map LChar.to_char s) |> CCString.of_list
       [@@program ]
     let of_string = LChar.explode[@@program ]
     let rec length (s : t) =
