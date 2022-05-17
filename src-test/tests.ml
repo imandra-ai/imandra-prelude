@@ -28,7 +28,7 @@ let () =
       expect_ (Imandra_prelude.(<) (Z.of_string "0") (Z.of_string "2")));
 
   run_test "Equal" (fun () ->
-      expect_ (Z.(=) (Z.of_nativeint 3n) (Z.of_nativeint 3n))
+      expect_ (Z.(equal) (Z.of_nativeint 3n) (Z.of_nativeint 3n))
     );
 
   (* this cant pass on bucklescript currently. in native ocaml, Zarith hooks
