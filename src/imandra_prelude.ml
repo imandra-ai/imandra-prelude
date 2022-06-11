@@ -626,10 +626,44 @@ module Option =
   end[@@ocaml.doc
        " {2 Option module}\n\n    The option type [type 'a option = None | Some of 'a] is useful for\n    representing partial functions and optional values.\n    "]
 #941 "prelude.iml"
-module Real =
+module Real :
+  sig
+    type t = real
+    val of_int : int -> t
+    [@@@ocaml.text "/*"]
+    val _to_int_round_down : t -> int
+    [@@@ocaml.text "/*"]
+    val to_int : t -> int
+    val (+) : t -> t -> t
+    val (-) : t -> t -> t
+    val (~-) : t -> t
+    val ( * ) : t -> t -> t
+    val (/) : t -> t -> t
+    val (<) : t -> t -> bool
+    val (<=) : t -> t -> bool
+    val (>) : t -> t -> bool
+    val (>=) : t -> t -> bool
+    val abs : t -> t
+    val min : t -> t -> t
+    val max : t -> t -> t
+    val mk_of_float : float -> t
+    val mk_of_q : t -> t
+    val mk_of_string : string -> t
+    val to_float : t -> float
+    val of_float : float -> t
+    val compare : t -> t -> Caml.Int.t
+    val pp : Format.formatter -> t -> unit
+    val to_string : t -> string
+    val to_string_approx : t -> string
+  end =
   struct
     type t = real
     let of_int : int -> t = Q.of_bigint
+    let _to_int_round_down : t -> int = Q.to_bigint
+    let to_int (r : t) =
+      (if r >=. (of_int (Z.of_nativeint 0n))
+       then _to_int_round_down r
+       else - (_to_int_round_down (-. r)) : int)
     let (+) = (+.)
     let (-) = (-.)
     let (~-) = (~-.)
@@ -652,8 +686,8 @@ module Real =
     let pp = Q.pp_print[@@program ]
     let to_string = Q.to_string[@@program ]
     let to_string_approx x = string_of_float @@ (Q.to_float x)[@@program ]
-  end
-#983 "prelude.iml"
+  end 
+#1018 "prelude.iml"
 module Map :
   sig
     type (+'a, 'b) t
@@ -769,7 +803,7 @@ module Map :
              m.default (Format.pp_print_list ~pp_sep pp_pair) m.l : unit)
       [@@program ]
   end 
-#1138 "prelude.iml"
+#1173 "prelude.iml"
 module Multiset :
   sig
     type +'a t = ('a, int) Map.t
@@ -794,9 +828,9 @@ module Multiset :
       function | [] -> empty | x::tail -> (add x) @@ (of_list tail)
   end [@@ocaml.doc
         " {2 Multiset}\n\n    A multiset is a collection of elements that don't have any particular\n    order, but can occur several times (unlike a regular set). "]
-#1164 "prelude.iml"
+#1199 "prelude.iml"
 [@@@ocaml.text " {2 Sets} "]
-#1166 "prelude.iml"
+#1201 "prelude.iml"
 module Set :
   sig
     type +'a t = ('a, bool) Map.t
@@ -875,7 +909,7 @@ module Set :
                 ~pp_sep:(fun out -> fun () -> Format.fprintf out ";@ ") pp_x)
              l : unit)[@@program ]
   end 
-#1295 "prelude.iml"
+#1330 "prelude.iml"
 module String :
   sig
     type t = string
@@ -940,17 +974,17 @@ module String :
         " Parse a string into a nonnegative number, or return [None] "]
   end [@@ocaml.doc
         " {2 Byte strings}\n\n    These strings correspond to OCaml native strings, and do not have\n    a particular unicode encoding.\n\n    Rather, they should be seen as sequences of bytes, and it is also\n    this way that Imandra considers them.\n"]
-#1402 "prelude.iml"
+#1437 "prelude.iml"
 let (^) = String.append[@@ocaml.doc " Alias to {!String.append} "]
-#1405 "prelude.iml"
+#1440 "prelude.iml"
 let succ x = x + (Z.of_nativeint 1n)[@@ocaml.doc " Next integer "]
-#1408 "prelude.iml"
+#1443 "prelude.iml"
 let pred x = x - (Z.of_nativeint 1n)[@@ocaml.doc " Previous integer "]
-#1410 "prelude.iml"
+#1445 "prelude.iml"
 let fst (x, _) = x
-#1411 "prelude.iml"
+#1446 "prelude.iml"
 let snd (_, y) = y
-#1413 "prelude.iml"
+#1448 "prelude.iml"
 module Float =
   struct
     type t = float
@@ -1001,7 +1035,7 @@ module Float =
     let rem : t -> t -> t = Caml.mod_float
     let sqrt : t -> t = Caml.sqrt
   end
-#1478 "prelude.iml"
+#1513 "prelude.iml"
 module LChar =
   struct
     type t =
@@ -1045,9 +1079,9 @@ module LChar =
            -> true
        | _ -> false : bool)
   end[@@ocaml.doc " {1 Logic mode char}\n\n    An 8-bit char. "]
-#1534 "prelude.iml"
+#1569 "prelude.iml"
 [@@@ocaml.text " {2 Logic-mode strings}\n\n    Strings purely in Imandra. "]
-#1538 "prelude.iml"
+#1573 "prelude.iml"
 module LString =
   struct
     type t = LChar.t list
@@ -1119,8 +1153,8 @@ module LString =
     let take : int -> t -> t = List.take
     let drop : int -> t -> t = List.drop
   end
-#1640 "prelude.iml"
+#1675 "prelude.iml"
 module Pervasives = struct  end
-#1641 "prelude.iml"
+#1676 "prelude.iml"
 module Stdlib = struct  end
 
