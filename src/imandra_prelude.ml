@@ -255,7 +255,7 @@ module Ordinal :
     let pair (x : t) (y : t) =
       (match x with
        | Int x -> Cons (one, (x + (Z.of_nativeint 1n)), y)
-       | Cons (a, x, tl) -> Cons ((plus a one), x, y) : t)
+       | Cons (a, x, _tl) -> Cons ((plus a one), x, y) : t)
     let triple x y z = pair x (pair y z)
     let quad x y z w = pair x (triple y z w)
     let simple_plus (x : t) (y : t) =
@@ -343,8 +343,7 @@ module Result =
     let return x = Ok x
     let fail s = Error s
     let map f e = match e with | Ok x -> Ok (f x) | Error s -> Error s
-    let map_err f e =
-      match e with | Ok _ as res -> res | Error y -> Error (f y)
+    let map_err f e = match e with | Ok x -> Ok x | Error y -> Error (f y)
     let get_or e ~default  = match e with | Ok x -> x | Error _ -> default
     let map_or f e ~default  =
       match e with | Ok x -> f x | Error _ -> default
@@ -765,10 +764,12 @@ module Map :
            | ([], []) -> []
            | ([], _) ->
                CCList.filter_map
-                 (fun (k, v) -> (CCOpt.map (fun v -> (k, v))) @@ (f2 k v)) l2
+                 (fun (k, v) -> (CCOption.map (fun v -> (k, v))) @@ (f2 k v))
+                 l2
            | (_, []) ->
                CCList.filter_map
-                 (fun (k, v) -> (CCOpt.map (fun v -> (k, v))) @@ (f1 k v)) l1
+                 (fun (k, v) -> (CCOption.map (fun v -> (k, v))) @@ (f1 k v))
+                 l1
            | ((x1, v1)::tl1, (x2, v2)::tl2) ->
                if x1 = x2
                then
@@ -1054,7 +1055,7 @@ module LChar =
            + ((!a0) lsl 0) : Caml.Int.t)[@@program ]
     let of_int (i : Caml.Int.t) =
       (assert ((let open Caml.Int in (i >= 0) && (i < 128)));
-       (let (!) x = let open Caml.Int in x <> 0 in
+       (let (!) x = x <> 0 in
         let a7 = !(i land (1 lsl 7)) in
         let a6 = !(i land (1 lsl 6)) in
         let a5 = !(i land (1 lsl 5)) in
