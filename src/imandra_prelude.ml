@@ -925,9 +925,13 @@ module String :
     val unsafe_sub : t -> int -> int -> t
     val sub : t -> int -> int -> t option
     val of_int : int -> t
+    val to_int : t -> int option
+    val is_int : t -> bool
+    val is_nat : t -> bool
     val to_nat : t -> int option
     [@@@ocaml.text "/*"]
     val unsafe_to_nat : t -> int
+    val unsafe_to_int : t -> int
     [@@@ocaml.text "/*"]
   end =
   struct
@@ -972,19 +976,38 @@ module String :
        if x >= (Z.of_nativeint 0n) then Some x else None : int option)
       [@@ocaml.doc
         " Parse a string into a nonnegative number, or return [None] "]
+    let is_nat (s : t) =
+      ((s <> "") && ((unsafe_to_nat s) >= (Z.of_nativeint 0n)) : bool)
+    let is_int (s : t) =
+      ((is_nat s) ||
+         ((prefix "-" s) &&
+            (is_nat
+               (unsafe_sub s (Z.of_nativeint 1n)
+                  ((length s) - (Z.of_nativeint 1n))))) : bool)
+    let unsafe_to_int (s : t) =
+      (let x = unsafe_to_nat s in
+       if x >= (Z.of_nativeint 0n)
+       then x
+       else
+         -
+           (unsafe_to_nat
+              (unsafe_sub s (Z.of_nativeint 1n)
+                 ((length s) - (Z.of_nativeint 1n)))) : int)
+    let to_int (s : t) =
+      (if is_int s then Some (unsafe_to_int s) else None : int option)
   end [@@ocaml.doc
         " {2 Byte strings}\n\n    These strings correspond to OCaml native strings, and do not have\n    a particular unicode encoding.\n\n    Rather, they should be seen as sequences of bytes, and it is also\n    this way that Imandra considers them.\n"]
-#1441 "prelude.iml"
+#1443 "prelude.iml"
 let (^) = String.append[@@ocaml.doc " Alias to {!String.append} "]
-#1444 "prelude.iml"
+#1446 "prelude.iml"
 let succ x = x + (Z.of_nativeint 1n)[@@ocaml.doc " Next integer "]
-#1447 "prelude.iml"
-let pred x = x - (Z.of_nativeint 1n)[@@ocaml.doc " Previous integer "]
 #1449 "prelude.iml"
+let pred x = x - (Z.of_nativeint 1n)[@@ocaml.doc " Previous integer "]
+#1451 "prelude.iml"
 let fst (x, _) = x
-#1450 "prelude.iml"
-let snd (_, y) = y
 #1452 "prelude.iml"
+let snd (_, y) = y
+#1454 "prelude.iml"
 module Float =
   struct
     type t = float
@@ -1035,7 +1058,7 @@ module Float =
     let rem : t -> t -> t = Caml.mod_float
     let sqrt : t -> t = Caml.sqrt
   end
-#1517 "prelude.iml"
+#1519 "prelude.iml"
 module LChar =
   struct
     type t =
@@ -1079,9 +1102,9 @@ module LChar =
            -> true
        | _ -> false : bool)
   end[@@ocaml.doc " {1 Logic mode char}\n\n    An 8-bit char. "]
-#1573 "prelude.iml"
+#1575 "prelude.iml"
 [@@@ocaml.text " {2 Logic-mode strings}\n\n    Strings purely in Imandra. "]
-#1577 "prelude.iml"
+#1579 "prelude.iml"
 module LString =
   struct
     type t = LChar.t list
@@ -1153,8 +1176,8 @@ module LString =
     let take : int -> t -> t = List.take
     let drop : int -> t -> t = List.drop
   end
-#1679 "prelude.iml"
+#1681 "prelude.iml"
 module Pervasives = struct  end
-#1680 "prelude.iml"
+#1682 "prelude.iml"
 module Stdlib = struct  end
 
