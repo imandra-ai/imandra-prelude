@@ -574,10 +574,18 @@ module Int =
     let rec for_down_to i j f =
       (if i >= j then (f i; for_down_to (i - (Z.of_nativeint 1n)) j f) : 
       unit)[@@program ]
+    let mod_zero_prod n m x =
+      implies
+        ((n > (Z.of_nativeint 0n)) && ((x mod n) = (Z.of_nativeint 0n)))
+        (((x * m) mod n) = (Z.of_nativeint 0n))[@@imandra_axiom ][@@rw ]
+    let mod_sub_id n m =
+      implies ((m <= n) && (m > (Z.of_nativeint 0n)))
+        (((n + ((Z.of_nativeint (-1n)) * m)) mod m) = (n mod m))[@@imandra_axiom
+                                                                  ][@@rw ]
   end
-#828 "prelude.iml"
+#844 "prelude.iml"
 module Bool = struct type t = bool end
-#835 "prelude.iml"
+#851 "prelude.iml"
 module Array =
   struct
     include Caml.Array[@@ocaml.doc
@@ -594,7 +602,7 @@ module Array =
     let blit a i b j len =
       Caml.Array.blit a (Z.to_int i) b (Z.to_int j) (Z.to_int len)
   end[@@ocaml.doc " {2 Arrays}\n\n   Program mode only "][@@program ]
-#857 "prelude.iml"
+#873 "prelude.iml"
 module Option =
   struct
     type 'a t = 'a option
@@ -628,7 +636,7 @@ module Option =
     let ( and* ) = monoid_product
   end[@@ocaml.doc
        " {2 Option module}\n\n    The option type [type 'a option = None | Some of 'a] is useful for\n    representing partial functions and optional values.\n    "]
-#950 "prelude.iml"
+#966 "prelude.iml"
 module Real :
   sig
     type t = real
@@ -690,7 +698,7 @@ module Real :
     let to_string = Q.to_string[@@program ]
     let to_string_approx x = string_of_float @@ (Q.to_float x)[@@program ]
   end 
-#1027 "prelude.iml"
+#1043 "prelude.iml"
 module Map :
   sig
     type (+'a, 'b) t
@@ -808,7 +816,7 @@ module Map :
              m.default (Format.pp_print_list ~pp_sep pp_pair) m.l : unit)
       [@@program ]
   end 
-#1183 "prelude.iml"
+#1199 "prelude.iml"
 module Multiset :
   sig
     type +'a t = ('a, int) Map.t
@@ -833,9 +841,9 @@ module Multiset :
       function | [] -> empty | x::tail -> (add x) @@ (of_list tail)
   end [@@ocaml.doc
         " {2 Multiset}\n\n    A multiset is a collection of elements that don't have any particular\n    order, but can occur several times (unlike a regular set). "]
-#1209 "prelude.iml"
+#1225 "prelude.iml"
 [@@@ocaml.text " {2 Sets} "]
-#1211 "prelude.iml"
+#1227 "prelude.iml"
 module Set :
   sig
     type +'a t = ('a, bool) Map.t
@@ -914,7 +922,7 @@ module Set :
                 ~pp_sep:(fun out -> fun () -> Format.fprintf out ";@ ") pp_x)
              l : unit)[@@program ]
   end 
-#1340 "prelude.iml"
+#1356 "prelude.iml"
 module String :
   sig
     type t = string
@@ -1002,17 +1010,17 @@ module String :
       (if is_int s then Some (unsafe_to_int s) else None : int option)
   end [@@ocaml.doc
         " {2 Byte strings}\n\n    These strings correspond to OCaml native strings, and do not have\n    a particular unicode encoding.\n\n    Rather, they should be seen as sequences of bytes, and it is also\n    this way that Imandra considers them.\n"]
-#1449 "prelude.iml"
+#1465 "prelude.iml"
 let (^) = String.append[@@ocaml.doc " Alias to {!String.append} "]
-#1452 "prelude.iml"
+#1468 "prelude.iml"
 let succ x = x + (Z.of_nativeint 1n)[@@ocaml.doc " Next integer "]
-#1455 "prelude.iml"
+#1471 "prelude.iml"
 let pred x = x - (Z.of_nativeint 1n)[@@ocaml.doc " Previous integer "]
-#1457 "prelude.iml"
+#1473 "prelude.iml"
 let fst (x, _) = x
-#1458 "prelude.iml"
+#1474 "prelude.iml"
 let snd (_, y) = y
-#1460 "prelude.iml"
+#1476 "prelude.iml"
 module Float =
   struct
     type t = float
@@ -1063,7 +1071,7 @@ module Float =
     let rem : t -> t -> t = Caml.mod_float
     let sqrt : t -> t = Caml.sqrt
   end
-#1525 "prelude.iml"
+#1541 "prelude.iml"
 module LChar =
   struct
     type t =
@@ -1081,7 +1089,7 @@ module LChar =
             + ((!a1) lsl 1))
            + ((!a0) lsl 0) : Caml.Int.t)[@@program ]
     let of_int (i : Caml.Int.t) =
-      (assert ((let open Caml.Int in (i >= 0) && (i < 128)));
+      (assert ((let open Caml.Int in (i >= 0) && (i < 256)));
        (let (!) x = x <> 0 in
         let a7 = !(i land (1 lsl 7)) in
         let a6 = !(i land (1 lsl 6)) in
@@ -1107,9 +1115,9 @@ module LChar =
            -> true
        | _ -> false : bool)
   end[@@ocaml.doc " {1 Logic mode char}\n\n    An 8-bit char. "]
-#1581 "prelude.iml"
+#1597 "prelude.iml"
 [@@@ocaml.text " {2 Logic-mode strings}\n\n    Strings purely in Imandra. "]
-#1585 "prelude.iml"
+#1601 "prelude.iml"
 module LString =
   struct
     type t = LChar.t list
@@ -1181,8 +1189,8 @@ module LString =
     let take : int -> t -> t = List.take
     let drop : int -> t -> t = List.drop
   end
-#1687 "prelude.iml"
+#1703 "prelude.iml"
 module Pervasives = struct  end
-#1688 "prelude.iml"
+#1704 "prelude.iml"
 module Stdlib = struct  end
 
