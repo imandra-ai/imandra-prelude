@@ -22,7 +22,7 @@ external (=) : t -> t -> bool = "equals" [@@bs.send]
 
 external (mod) : t -> t -> t = "mod" [@@bs.send]
 
-type q_r = { quotient: t; remainder: t } [@@bs.deriving abstract]
+type q_r = { quotient: t; remainder: t } [@@bs.deriving (jsProperties, getSet)]
 external div_rem_ : t -> t -> q_r = "divmod" [@@bs.send]
 
 external pred : t -> t = "prev" [@@bs.send]
